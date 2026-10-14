@@ -10,56 +10,58 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: #f4f7f6; color: #333; display: flex; height: 100vh; overflow: hidden; }
         
-        /* Login Portal Overlay */
-        #login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0f4c3a; display: flex; justify-content: center; align-items: center; z-index: 9999; }
-        .login-card { background: #fff; padding: 30px; border-radius: 12px; width: 380px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
-        .login-card h3 { margin-bottom: 10px; color: #0f4c3a; }
+        /* Login Portal Overlay - Rich Coaching Green Theme */
+        #login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0e3d30; display: flex; justify-content: center; align-items: center; z-index: 9999; }
+        .login-card { background: #fff; padding: 30px; border-radius: 12px; width: 380px; text-align: center; box-shadow: 0 4px 25px rgba(0,0,0,0.3); }
+        .login-card h3 { margin-bottom: 15px; color: #0e3d30; }
         .login-tabs { display: flex; margin-bottom: 20px; border-bottom: 2px solid #eee; }
         .login-tab { flex: 1; padding: 10px; cursor: pointer; font-weight: 600; color: #7f8c8d; border-bottom: 2px solid transparent; }
-        .login-tab.active { color: #0f4c3a; border-bottom: 2px solid #0f4c3a; }
+        .login-tab.active { color: #0e3d30; border-bottom: 2px solid #0e3d30; }
         .login-form { display: none; }
         .login-form.active { display: block; }
         .login-card input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 6px; }
-        .login-card button { width: 100%; background: #0f4c3a; color: #fff; padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .login-card button:hover { background: #0b382b; }
+        .login-card button { width: 100%; background: #0e3d30; color: #fff; padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .login-card button:hover { background: #08261e; }
 
-        /* Sidebar Navigation - Exact Green Theme */
-        sidebar { width: 270px; background: #0f4c3a; color: white; display: flex; flex-direction: column; height: 100%; box-shadow: 2px 0 5px rgba(0,0,0,0.1); }
+        /* Sidebar Navigation - Exact Coaching Green */
+        sidebar { width: 270px; background: #0e3d30; color: white; display: flex; flex-direction: column; height: 100%; box-shadow: 2px 0 5px rgba(0,0,0,0.1); }
         
-        /* Admin Header with Profile Photo Section matching image */
-        .sidebar-header { padding: 20px; background: #0b382b; text-align: center; display: flex; align-items: center; gap: 15px; }
-        .admin-avatar-container { position: relative; width: 45px; height: 45px; cursor: pointer; }
-        .admin-avatar { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; background: #fff; }
+        /* Admin Header with Profile Photo & Logout */
+        .sidebar-header { padding: 15px 20px; background: #08261e; display: flex; align-items: center; justify-content: space-between; }
+        .admin-profile-box { display: flex; align-items: center; gap: 10px; }
+        .admin-avatar-container { position: relative; width: 40px; height: 40px; cursor: pointer; }
+        .admin-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; background: #fff; }
         .admin-avatar-input { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
-        .admin-info { text-align: left; }
-        .admin-info h3 { font-size: 1rem; color: #fff; margin: 0; }
-        .admin-info span { font-size: 0.8rem; color: #d1e7dd; }
+        .admin-info h3 { font-size: 0.95rem; color: #fff; margin: 0; }
+        .admin-info span { font-size: 0.75rem; color: #b8d4cb; }
+        .logout-btn { background: #c0392b; color: #fff; border: none; padding: 6px 10px; border-radius: 4px; font-size: 0.8rem; cursor: pointer; font-weight: bold; }
+        .logout-btn:hover { background: #a93226; }
 
         .sidebar-menu { list-style: none; padding: 15px 0; overflow-y: auto; flex-grow: 1; }
-        .sidebar-menu li a { display: block; padding: 12px 20px; color: #d1e7dd; text-decoration: none; transition: 0.3s; font-size: 0.95rem; }
-        .sidebar-menu li a:hover, .sidebar-menu li a.active { background: #145c47; color: #fff; border-left: 4px solid #fff; }
+        .sidebar-menu li a { display: block; padding: 12px 20px; color: #b8d4cb; text-decoration: none; transition: 0.3s; font-size: 0.95rem; }
+        .sidebar-menu li a:hover, .sidebar-menu li a.active { background: #145a44; color: #fff; border-left: 4px solid #fff; }
 
         /* Main Content Area */
         .main-content { flex-grow: 1; padding: 30px; overflow-y: auto; background: #f8f9fa; display: none; }
         .section-box { background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 25px; display: none; }
         .section-box.active { display: block; }
-        h2 { margin-bottom: 20px; color: #0f4c3a; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        h2 { margin-bottom: 20px; color: #0e3d30; border-bottom: 2px solid #eee; padding-bottom: 10px; }
         
         /* Form & Inputs Styling */
         .form-group { margin-bottom: 15px; }
         label { display: block; font-weight: 600; margin-bottom: 5px; color: #555; }
         input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem; background: #f9f9f9; }
-        button { background: #0f4c3a; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 1rem; font-weight: 600; transition: 0.3s; }
-        button:hover { background: #0b382b; }
+        button { background: #0e3d30; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 1rem; font-weight: 600; transition: 0.3s; }
+        button:hover { background: #08261e; }
 
         /* Tables & Cards */
         table { width: 100%; border-collapse: collapse; margin-top: 15px; background: #fff; }
         th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
         th { background: #f8f9fa; color: #333; }
         .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
-        .stat-card { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-left: 4px solid #0f4c3a; }
+        .stat-card { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-left: 4px solid #0e3d30; }
         .stat-card h4 { font-size: 0.9rem; color: #7f8c8d; }
-        .stat-card p { font-size: 1.5rem; font-weight: bold; color: #0f4c3a; margin-top: 5px; }
+        .stat-card p { font-size: 1.5rem; font-weight: bold; color: #0e3d30; margin-top: 5px; }
     </style>
 </head>
 <body>
@@ -89,29 +91,32 @@
         </div>
     </div>
 
-    <!-- Serial Wise Sidebar Menu with Admin Profile Photo Section -->
+    <!-- Serial Wise Sidebar Menu with Admin Profile & Logout -->
     <sidebar id="portalSidebar" style="display: none;">
         <div class="sidebar-header">
-            <div class="admin-avatar-container" title="Click to change admin photo">
-                <img id="adminProfileImg" src="https://via.placeholder.com/45" alt="Admin" class="admin-avatar">
-                <input type="file" id="adminPhotoInput" class="admin-avatar-input" accept="image/*" onchange="updateAdminPhoto(event)">
+            <div class="admin-profile-box">
+                <div class="admin-avatar-container" title="Click to change admin photo">
+                    <img id="adminProfileImg" src="https://via.placeholder.com/40" alt="Admin" class="admin-avatar">
+                    <input type="file" id="adminPhotoInput" class="admin-avatar-input" accept="image/*" onchange="updateAdminPhoto(event)">
+                </div>
+                <div class="admin-info">
+                    <h3 id="sidebarRoleTitle">NK Education</h3>
+                    <span id="sidebarRoleSubtitle">Admin Portal</span>
+                </div>
             </div>
-            <div class="admin-info">
-                <h3>NK Education</h3>
-                <span>Admin Portal</span>
-            </div>
+            <button class="logout-btn" onclick="logoutPortal()">Logout</button>
         </div>
-        <ul class="sidebar-menu">
+        <ul class="sidebar-menu" id="sidebarMenuList">
             <li><a href="#" onclick="showSection('dashboard', this)" class="active">1. Dashboard</a></li>
             <li><a href="#" onclick="showSection('student-directory', this)">2. Student Directory</a></li>
             <li><a href="#" onclick="showSection('enquiries', this)">3. Admission Enquiries</a></li>
             <li><a href="#" onclick="showSection('fees-dues', this)">4. Fees & Dues Management</a></li>
             <li><a href="#" onclick="showSection('attendance', this)">5. Attendance Tracker</a></li>
-            <li><a href="#" onclick="showSection('performance', this)">6. Performance & Comparison</a></li>
+            <li id="menuPerformance"><a href="#" onclick="showSection('performance', this)">6. Performance & Comparison</a></li>
             <li><a href="#" onclick="showSection('sms-center', this)">7. SMS & Notification Center</a></li>
             <li><a href="#" onclick="showSection('test-series', this)">8. Test Series & PDF Hub</a></li>
             <li><a href="#" onclick="showSection('mcq-quiz', this)">9. MCQ Quiz Portal</a></li>
-            <li><a href="#" onclick="showSection('admin-settings', this)">10. Admin Settings</a></li>
+            <li id="menuSettings"><a href="#" onclick="showSection('admin-settings', this)">10. Admin Settings</a></li>
         </ul>
     </sidebar>
 
@@ -211,7 +216,7 @@
             <button onclick="saveAttendance()">Save Attendance</button>
         </div>
 
-        <!-- 6. Student Performance & Comparison -->
+        <!-- 6. Student Performance & Comparison (Hidden for Students) -->
         <div id="performance" class="section-box">
             <h2>Student Performance & Class Comparison</h2>
             <div class="form-group">
@@ -324,7 +329,7 @@
             }
         }
 
-        // Admin Password Verification (With LocalStorage support)
+        // Admin Password Verification
         function checkAdminPassword() {
             let pass = document.getElementById('adminPasswordInput').value.trim();
             let savedPass = localStorage.getItem('admin_portal_pass') || 'admin123';
@@ -333,9 +338,44 @@
                 document.getElementById('login-overlay').style.display = 'none';
                 document.getElementById('portalSidebar').style.display = 'flex';
                 document.getElementById('portalMainContent').style.display = 'block';
+                document.getElementById('sidebarRoleTitle').innerText = 'NK Education';
+                document.getElementById('sidebarRoleSubtitle').innerText = 'Admin Portal';
+                
+                // Show performance & settings for admin
+                document.getElementById('menuPerformance').style.display = 'block';
+                document.getElementById('menuSettings').style.display = 'block';
             } else {
                 document.getElementById('loginError').style.display = 'block';
             }
+        }
+
+        // Student Login Verification (Hides Performance & Settings)
+        function checkStudentLogin() {
+            let val = document.getElementById('studentRollInput').value.trim();
+            if(val !== '') {
+                document.getElementById('login-overlay').style.display = 'none';
+                document.getElementById('portalSidebar').style.display = 'flex';
+                document.getElementById('portalMainContent').style.display = 'block';
+                document.getElementById('sidebarRoleTitle').innerText = 'Student Portal';
+                document.getElementById('sidebarRoleSubtitle').innerText = 'Roll: ' + val;
+                
+                // Hide Performance and Admin Settings for Students
+                document.getElementById('menuPerformance').style.display = 'none';
+                document.getElementById('menuSettings').style.display = 'none';
+                
+                alert('Welcome Student! Logged in successfully.');
+            } else {
+                document.getElementById('studentLoginError').style.display = 'block';
+            }
+        }
+
+        // Logout Functionality
+        function logoutPortal() {
+            document.getElementById('login-overlay').style.display = 'flex';
+            document.getElementById('portalSidebar').style.display = 'none';
+            document.getElementById('portalMainContent').style.display = 'none';
+            document.getElementById('adminPasswordInput').value = '';
+            document.getElementById('studentRollInput').value = '';
         }
 
         // Change Admin Password Functionality
@@ -365,19 +405,6 @@
             document.getElementById('confirmPass').value = '';
         }
 
-        // Student Login Verification
-        function checkStudentLogin() {
-            let val = document.getElementById('studentRollInput').value.trim();
-            if(val !== '') {
-                document.getElementById('login-overlay').style.display = 'none';
-                document.getElementById('portalSidebar').style.display = 'flex';
-                document.getElementById('portalMainContent').style.display = 'block';
-                alert('Welcome Student! Logged in successfully.');
-            } else {
-                document.getElementById('studentLoginError').style.display = 'block';
-            }
-        }
-
         // Navigation Handler
         function showSection(sectionId, element) {
             document.querySelectorAll('.section-box').forEach(box => box.classList.remove('active'));
@@ -392,13 +419,13 @@
             let attDateElem = document.getElementById('attendanceDate');
             if(attDateElem) attDateElem.value = today;
 
-            // Initialize Charts with Green Theme
+            // Initialize Charts with Coaching Green Theme
             const ctx1 = document.getElementById('classComparisonChart').getContext('2d');
             new Chart(ctx1, {
                 type: 'bar',
                 data: {
                     labels: ['Physics', 'Chemistry', 'Maths', 'English'],
-                    datasets: [{ label: 'Class Average Score (%)', data: [75, 82, 68, 90], backgroundColor: '#0f4c3a' }]
+                    datasets: [{ label: 'Class Average Score (%)', data: [75, 82, 68, 90], backgroundColor: '#0e3d30' }]
                 }
             });
 
@@ -407,7 +434,7 @@
                 type: 'line',
                 data: {
                     labels: ['Test 1', 'Test 2', 'Test 3', 'Test 4'],
-                    datasets: [{ label: 'Student Performance Trend (%)', data: [65, 70, 85, 92], borderColor: '#0f4c3a', fill: false }]
+                    datasets: [{ label: 'Student Performance Trend (%)', data: [65, 70, 85, 92], borderColor: '#0e3d30', fill: false }]
                 }
             });
         };
