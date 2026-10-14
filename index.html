@@ -26,15 +26,16 @@
         /* Sidebar Navigation - Exact Coaching Green */
         sidebar { width: 270px; background: #0e3d30; color: white; display: flex; flex-direction: column; height: 100%; box-shadow: 2px 0 5px rgba(0,0,0,0.1); }
         
-        /* Admin Header with Profile Photo & Logout */
-        .sidebar-header { padding: 15px 20px; background: #08261e; display: flex; align-items: center; justify-content: space-between; }
+        /* Admin Header with Profile Photo & Clear Logout Button */
+        .sidebar-header { padding: 15px 20px; background: #08261e; display: flex; flex-direction: column; gap: 12px; border-bottom: 1px solid #145a44; }
+        .sidebar-top-row { display: flex; align-items: center; justify-content: space-between; width: 100%; }
         .admin-profile-box { display: flex; align-items: center; gap: 10px; }
         .admin-avatar-container { position: relative; width: 40px; height: 40px; cursor: pointer; }
         .admin-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; background: #fff; }
         .admin-avatar-input { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
         .admin-info h3 { font-size: 0.95rem; color: #fff; margin: 0; }
         .admin-info span { font-size: 0.75rem; color: #b8d4cb; }
-        .logout-btn { background: #c0392b; color: #fff; border: none; padding: 6px 10px; border-radius: 4px; font-size: 0.8rem; cursor: pointer; font-weight: bold; }
+        .logout-btn { background: #c0392b; color: #fff; border: none; padding: 6px 14px; border-radius: 6px; font-size: 0.85rem; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s; text-align: center; }
         .logout-btn:hover { background: #a93226; }
 
         .sidebar-menu { list-style: none; padding: 15px 0; overflow-y: auto; flex-grow: 1; }
@@ -91,20 +92,22 @@
         </div>
     </div>
 
-    <!-- Serial Wise Sidebar Menu with Admin Profile & Logout -->
+    <!-- Serial Wise Sidebar Menu with Admin Profile & Logout Button -->
     <sidebar id="portalSidebar" style="display: none;">
         <div class="sidebar-header">
-            <div class="admin-profile-box">
-                <div class="admin-avatar-container" title="Click to change admin photo">
-                    <img id="adminProfileImg" src="https://via.placeholder.com/40" alt="Admin" class="admin-avatar">
-                    <input type="file" id="adminPhotoInput" class="admin-avatar-input" accept="image/*" onchange="updateAdminPhoto(event)">
-                </div>
-                <div class="admin-info">
-                    <h3 id="sidebarRoleTitle">NK Education</h3>
-                    <span id="sidebarRoleSubtitle">Admin Portal</span>
+            <div class="sidebar-top-row">
+                <div class="admin-profile-box">
+                    <div class="admin-avatar-container" title="Click to change admin photo">
+                        <img id="adminProfileImg" src="https://via.placeholder.com/40" alt="Admin" class="admin-avatar">
+                        <input type="file" id="adminPhotoInput" class="admin-avatar-input" accept="image/*" onchange="updateAdminPhoto(event)">
+                    </div>
+                    <div class="admin-info">
+                        <h3 id="sidebarRoleTitle">NK Education</h3>
+                        <span id="sidebarRoleSubtitle">Admin Portal</span>
+                    </div>
                 </div>
             </div>
-            <button class="logout-btn" onclick="logoutPortal()">Logout</button>
+            <button class="logout-btn" onclick="logoutPortal()">🚪 Logout Portal</button>
         </div>
         <ul class="sidebar-menu" id="sidebarMenuList">
             <li><a href="#" onclick="showSection('dashboard', this)" class="active">1. Dashboard</a></li>
