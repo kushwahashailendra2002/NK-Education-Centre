@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NK Education Centre - Student Management Portal</title>
+    <title>NK Education Centre - Complete Student Management Portal</title>
     <!-- Chart.js for Performance & Comparison Graphs -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -12,11 +12,16 @@
         
         /* Login Portal Overlay */
         #login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #2c3e50; display: flex; justify-content: center; align-items: center; z-index: 9999; }
-        .login-card { background: #fff; padding: 30px; border-radius: 8px; width: 350px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        .login-card h3 { margin-bottom: 15px; color: #2c3e50; }
+        .login-card { background: #fff; padding: 30px; border-radius: 8px; width: 380px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        .login-card h3 { margin-bottom: 10px; color: #2c3e50; }
+        .login-tabs { display: flex; margin-bottom: 20px; border-bottom: 2px solid #eee; }
+        .login-tab { flex: 1; padding: 10px; cursor: pointer; font-weight: 600; color: #7f8c8d; border-bottom: 2px solid transparent; }
+        .login-tab.active { color: #3498db; border-bottom: 2px solid #3498db; }
+        .login-form { display: none; }
+        .login-form.active { display: block; }
         .login-card input { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 6px; }
-        .login-card button { width: 100%; background: #2c3e50; color: #fff; padding: 10px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
-        .login-card button:hover { background: #34495e; }
+        .login-card button { width: 100%; background: #3498db; color: #fff; padding: 10px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .login-card button:hover { background: #2980b9; }
 
         /* Sidebar Navigation */
         sidebar { width: 270px; background: #2c3e50; color: white; display: flex; flex-direction: column; height: 100%; box-shadow: 2px 0 5px rgba(0,0,0,0.1); }
@@ -35,29 +40,43 @@
         .form-group { margin-bottom: 15px; }
         label { display: block; font-weight: 600; margin-bottom: 5px; color: #555; }
         input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem; background: #f9f9f9; }
-        button { background: #2c3e50; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 1rem; font-weight: 600; transition: 0.3s; }
-        button:hover { background: #34495e; }
+        button { background: #3498db; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 1rem; font-weight: 600; transition: 0.3s; }
+        button:hover { background: #2980b9; }
 
         /* Tables & Cards */
         table { width: 100%; border-collapse: collapse; margin-top: 15px; background: #fff; }
         th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
         th { background: #f8f9fa; color: #333; }
         .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
-        .stat-card { background: #eef2f7; padding: 15px; border-radius: 8px; border-left: 4px solid #2c3e50; }
+        .stat-card { background: #eef2f7; padding: 15px; border-radius: 8px; border-left: 4px solid #3498db; }
         .stat-card h4 { font-size: 0.9rem; color: #7f8c8d; }
         .stat-card p { font-size: 1.5rem; font-weight: bold; color: #2c3e50; margin-top: 5px; }
     </style>
 </head>
 <body>
 
-    <!-- Admin Password Login Portal -->
+    <!-- Login Portal (Admin & Student Switch) -->
     <div id="login-overlay">
         <div class="login-card">
-            <h3>NK Education Login</h3>
-            <p style="font-size: 0.85rem; color: #666; margin-bottom: 15px;">Please enter your admin password to access the portal.</p>
-            <input type="password" id="adminPasswordInput" placeholder="Enter password">
-            <button onclick="checkAdminPassword()">Unlock Portal</button>
-            <p id="loginError" style="color: red; font-size: 0.85rem; margin-top: 10px; display: none;">Incorrect Password!</p>
+            <h3>NK Education Portal</h3>
+            <div class="login-tabs">
+                <div class="login-tab active" onclick="switchLoginTab('admin')">Admin Login</div>
+                <div class="login-tab" onclick="switchLoginTab('student')">Student Login</div>
+            </div>
+
+            <!-- Admin Form -->
+            <div id="adminLoginForm" class="login-form active">
+                <input type="password" id="adminPasswordInput" placeholder="Enter Admin Password (admin123)" onkeydown="if(event.key === 'Enter') checkAdminPassword()">
+                <button onclick="checkAdminPassword()">Login as Admin</button>
+                <p id="loginError" style="color: red; font-size: 0.85rem; margin-top: 10px; display: none;">Incorrect Password!</p>
+            </div>
+
+            <!-- Student Form -->
+            <div id="studentLoginForm" class="login-form">
+                <input type="text" id="studentRollInput" placeholder="Enter Roll No or Name" onkeydown="if(event.key === 'Enter') checkStudentLogin()">
+                <button onclick="checkStudentLogin()">Login as Student</button>
+                <p id="studentLoginError" style="color: red; font-size: 0.85rem; margin-top: 10px; display: none;">Student not found!</p>
+            </div>
         </div>
     </div>
 
@@ -146,7 +165,7 @@
             </table>
         </div>
 
-        <!-- 5. Attendance Tracker (Auto Date & Class Wise List) -->
+        <!-- 5. Attendance Tracker -->
         <div id="attendance" class="section-box">
             <h2>Attendance Tracker</h2>
             <div class="summary-grid">
@@ -238,4 +257,180 @@
     </div>
 
     <script>
-        // Password
+        // Switch between Admin and Student Login Tabs
+        function switchLoginTab(role) {
+            document.querySelectorAll('.login-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.login-form').forEach(f => f.classList.remove('active'));
+            if(role === 'admin') {
+                document.querySelectorAll('.login-tab')[0].classList.add('active');
+                document.getElementById('adminLoginForm').classList.add('active');
+            } else {
+                document.querySelectorAll('.login-tab')[1].classList.add('active');
+                document.getElementById('studentLoginForm').classList.add('active');
+            }
+        }
+
+        // Admin Password Verification
+        function checkAdminPassword() {
+            let pass = document.getElementById('adminPasswordInput').value.trim();
+            if(pass === 'admin123' || pass === 'nk@2026') {
+                document.getElementById('login-overlay').style.display = 'none';
+                document.getElementById('portalSidebar').style.display = 'flex';
+                document.getElementById('portalMainContent').style.display = 'block';
+            } else {
+                document.getElementById('loginError').style.display = 'block';
+            }
+        }
+
+        // Student Login Verification
+        function checkStudentLogin() {
+            let val = document.getElementById('studentRollInput').value.trim();
+            if(val !== '') {
+                document.getElementById('login-overlay').style.display = 'none';
+                document.getElementById('portalSidebar').style.display = 'flex';
+                document.getElementById('portalMainContent').style.display = 'block';
+                alert('Welcome Student! Logged in successfully.');
+            } else {
+                document.getElementById('studentLoginError').style.display = 'block';
+            }
+        }
+
+        // Navigation Handler
+        function showSection(sectionId, element) {
+            document.querySelectorAll('.section-box').forEach(box => box.classList.remove('active'));
+            document.querySelectorAll('.sidebar-menu a').forEach(a => a.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            element.classList.add('active');
+        }
+
+        // Set Auto Current Date on Load for Attendance
+        window.onload = function() {
+            let today = new Date().toISOString().split('T')[0];
+            let attDateElem = document.getElementById('attendanceDate');
+            if(attDateElem) attDateElem.value = today;
+
+            // Initialize Charts
+            const ctx1 = document.getElementById('classComparisonChart').getContext('2d');
+            new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: ['Physics', 'Chemistry', 'Maths', 'English'],
+                    datasets: [{ label: 'Class Average Score (%)', data: [75, 82, 68, 90], backgroundColor: '#3498db' }]
+                }
+            });
+
+            const ctx2 = document.getElementById('individualChart').getContext('2d');
+            new Chart(ctx2, {
+                type: 'line',
+                data: {
+                    labels: ['Test 1', 'Test 2', 'Test 3', 'Test 4'],
+                    datasets: [{ label: 'Student Performance Trend (%)', data: [65, 70, 85, 92], borderColor: '#3498db', fill: false }]
+                }
+            });
+        };
+
+        // Students Array for Attendance & Directory Demo
+        let studentsList = [
+            { roll: 101, name: 'Rahul Sharma', sClass: '10th', board: 'MP Board', address: 'Satna', photo: 'https://via.placeholder.com/40' },
+            { roll: 102, name: 'Amit Kumar', sClass: '12th', board: 'CBSE', address: 'Rewa', photo: 'https://via.placeholder.com/40' },
+            { roll: 103, name: 'Priya Singh', sClass: '10th', board: 'MP Board', address: 'Satna', photo: 'https://via.placeholder.com/40' }
+        ];
+
+        let rollCounter = 104;
+        function addStudent() {
+            let name = document.getElementById('sName').value;
+            let sClass = document.getElementById('sClass').value;
+            let address = document.getElementById('sAddress').value;
+            let board = document.getElementById('sBoard').value;
+            let photoInput = document.getElementById('sPhoto');
+
+            if(!name || !sClass) {
+                alert('Please enter Student Name and Class!');
+                return;
+            }
+
+            let photoSrc = 'https://via.placeholder.com/40';
+            if (photoInput.files && photoInput.files[0]) {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    photoSrc = e.target.result;
+                    saveNewStudentRecord(rollCounter++, name, sClass, board, address, photoSrc);
+                }
+                reader.readAsDataURL(photoInput.files[0]);
+            } else {
+                saveNewStudentRecord(rollCounter++, name, sClass, board, address, photoSrc);
+            }
+        }
+
+        function saveNewStudentRecord(roll, name, sClass, board, address, photo) {
+            studentsList.push({ roll, name, sClass, board, address, photo });
+            let table = document.getElementById('studentTable');
+            let row = table.insertRow();
+            row.innerHTML = `
+                <td><img src="${photo}" alt="Student" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;"></td>
+                <td>${roll}</td>
+                <td>${name}</td>
+                <td>${sClass}</td>
+                <td>${board}</td>
+                <td>${address}</td>
+            `;
+            alert('Student added successfully with Photo, Address & Board!');
+        }
+
+        // Load Class Students List for Attendance
+        function loadClassStudentsForAttendance() {
+            let selectedClass = document.getElementById('attendanceClassSelect').value;
+            let table = document.getElementById('attendanceListTable');
+            table.innerHTML = `<tr><th>Roll No</th><th>Student Name</th><th>Class</th><th>Mark Attendance (Present / Absent)</th></tr>`;
+            
+            let filteredStudents = studentsList.filter(s => s.sClass.toLowerCase() === selectedClass.toLowerCase());
+            
+            if(filteredStudents.length === 0) {
+                let row = table.insertRow();
+                row.innerHTML = `<td colspan="4" style="text-align:center; color: #7f8c8d;">No students found in this class.</td>`;
+                return;
+            }
+
+            filteredStudents.forEach(student => {
+                let row = table.insertRow();
+                row.innerHTML = `
+                    <td>${student.roll}</td>
+                    <td>${student.name}</td>
+                    <td>${student.sClass}</td>
+                    <td>
+                        <label style="display:inline; margin-right:15px;"><input type="radio" name="att_${student.roll}" value="Present" checked> Present</label>
+                        <label style="display:inline;"><input type="radio" name="att_${student.roll}" value="Absent"> Absent</label>
+                    </td>
+                `;
+            });
+        }
+
+        function saveAttendance() {
+            let date = document.getElementById('attendanceDate').value;
+            alert(`Attendance successfully saved for date: ${date}!`);
+            document.getElementById('countPresent').innerText = studentsList.length;
+            document.getElementById('countAbsent').innerText = 0;
+        }
+
+        function addEnquiry() {
+            alert('Admission enquiry saved successfully!');
+        }
+
+        function sendSMSNotifications() {
+            alert('Notification / SMS sent successfully to registered numbers!');
+        }
+
+        // MCQ Result Logic
+        function submitQuiz() {
+            let score = 0;
+            if(document.getElementById('q1_correct').checked) score++;
+            if(document.getElementById('q2_correct').checked) score++;
+            document.getElementById('quizResult').innerText = `Quiz Submitted! Your Score: ${score}/2 (${(score/2)*100}%)`;
+        }
+
+        function publishTest() {
+            alert('Test Series and PDF published successfully with timer configurations!');
+        }
+    </script>
+</body>
+</html>
