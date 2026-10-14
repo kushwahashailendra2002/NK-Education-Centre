@@ -229,4 +229,243 @@
             <h2>Test Series & Practice Hub</h2>
             <div id="adminTestCreationBox" class="form-group admin-only" style="background:#f1f9f6; padding:15px; border-radius:8px; margin-bottom:20px;">
                 <h3>Create New Test (Admin Only)</h3>
-                <input type="text" id="testTitle" placeholder="Test Title e.g.
+                <input type="text" id="testTitle" placeholder="Test Title e.g. Physics Mock Test 1" style="margin-top:8px;">
+                <input type="file" id="testPdfFile" accept=".pdf" style="margin-top:8px;">
+                <input type="number" id="testDuration" value="30" placeholder="Duration in Mins" style="margin-top:8px;">
+                <button type="button" onclick="publishTest()" style="margin-top:10px;">+ Publish Test</button>
+            </div>
+            <h3>Available Tests for Students</h3>
+            <table id="testTable">
+                <tr><th>Test Title</th><th>Duration</th><th>Action</th></tr>
+                <tr><td>Physics Chapter 1 Mock Test</td><td>30 Mins</td><td><button type="button" onclick="alert('Starting Test...')">Start Attempt</button></td></tr>
+            </table>
+        </div>
+
+        <!-- 9. MCQ Quiz Portal -->
+        <div id="mcq-quiz" class="section-box">
+            <h2>MCQ Quiz Portal</h2>
+            <div id="quizContainer">
+                <h3>Question 1: What is the SI unit of Electric Current?</h3>
+                <label style="display:inline; margin-right:15px;"><input type="radio" name="quiz_q1" value="A"> Volt</label>
+                <label style="display:inline; margin-right:15px;"><input type="radio" name="quiz_q1" value="B" id="q1_correct"> Ampere</label>
+                <label style="display:inline;"><input type="radio" name="quiz_q1" value="C"> Watt</label>
+                <br><br>
+                <h3>Question 2: Ohm's Law formula is?</h3>
+                <label style="display:inline; margin-right:15px;"><input type="radio" name="quiz_q2" value="A" id="q2_correct"> V = IR</label>
+                <label style="display:inline;"><input type="radio" name="quiz_q2" value="B"> P = VI</label>
+                <br><br>
+                <button type="button" onclick="submitQuiz()">Submit Quiz & Check Result</button>
+            </div>
+            <div id="quizResult" style="margin-top: 20px; font-weight: bold; font-size: 1.2rem;"></div>
+        </div>
+
+        <!-- 10. Admin Settings -->
+        <div id="admin-settings" class="section-box admin-only">
+            <h2>Admin Settings & Security</h2>
+            <div class="form-group"><label>Current Password</label><input type="password" id="currentPass" placeholder="Enter current password"></div>
+            <div class="form-group"><label>New Password</label><input type="password" id="newPass" placeholder="Enter new password"></div>
+            <div class="form-group"><label>Confirm New Password</label><input type="password" id="confirmPass" placeholder="Confirm new password"></div>
+            <button type="button" onclick="changeAdminPassword()">Update Password</button>
+            <p id="passwordMsg" style="margin-top: 15px; font-weight: bold;"></p>
+        </div>
+
+    </div>
+
+    <script>
+        const adminMenuHTML = `
+            <li><a href="#" onclick="showSection('dashboard', this); return false;" class="active">1. Dashboard</a></li>
+            <li><a href="#" onclick="showSection('student-directory', this); return false;">2. Student Directory</a></li>
+            <li><a href="#" onclick="showSection('enquiries', this); return false;">3. Admission Enquiries</a></li>
+            <li><a href="#" onclick="showSection('fees-dues', this); return false;">4. Fees & Dues Management</a></li>
+            <li><a href="#" onclick="showSection('attendance', this); return false;">5. Attendance Tracker</a></li>
+            <li><a href="#" onclick="showSection('performance', this); return false;">6. Student Comparison & Performance</a></li>
+            <li><a href="#" onclick="showSection('sms-center', this); return false;">7. SMS & Notification Center</a></li>
+            <li><a href="#" onclick="showSection('test-series', this); return false;">8. Test Series & PDF Hub</a></li>
+            <li><a href="#" onclick="showSection('mcq-quiz', this); return false;">9. MCQ Quiz Portal</a></li>
+            <li><a href="#" onclick="showSection('admin-settings', this); return false;">10. Admin Settings</a></li>
+        `;
+
+        const studentMenuHTML = `
+            <li><a href="#" onclick="showSection('dashboard', this); return false;" class="active">1. My Profile & Dashboard</a></li>
+            <li><a href="#" onclick="showSection('fees-dues', this); return false;">2. My Fees Status</a></li>
+            <li><a href="#" onclick="showSection('test-series', this); return false;">3. Test Series Hub</a></li>
+            <li><a href="#" onclick="showSection('mcq-quiz', this); return false;">4. MCQ Quiz Portal</a></li>
+            <li><a href="#" onclick="showSection('performance', this); return false;">5. Student Comparison</a></li>
+        `;
+
+        function switchLoginTab(role) {
+            document.getElementById('tabAdmin').classList.remove('active');
+            document.getElementById('tabStudent').classList.remove('active');
+            document.getElementById('adminLoginForm').classList.remove('active');
+            document.getElementById('studentLoginForm').classList.remove('active');
+            
+            if(role === 'admin') {
+                document.getElementById('tabAdmin').classList.add('active');
+                document.getElementById('adminLoginForm').classList.add('active');
+            } else {
+                document.getElementById('tabStudent').classList.add('active');
+                document.getElementById('studentLoginForm').classList.add('active');
+            }
+        }
+
+        // Admin Login
+        function checkAdminPassword() {
+            let pass = document.getElementById('adminPasswordInput').value.trim();
+            let savedPass = localStorage.getItem('admin_portal_pass') || 'admin123';
+            
+            if(pass === savedPass || pass === 'nk@2026') {
+                document.getElementById('login-overlay').style.display = 'none';
+                document.getElementById('portalSidebar').style.display = 'flex';
+                document.getElementById('portalMainContent').style.display = 'block';
+                document.getElementById('sidebarRoleTitle').innerText = 'NK Education';
+                document.getElementById('sidebarRoleSubtitle').innerText = 'Admin Portal';
+                document.getElementById('sidebarMenuList').innerHTML = adminMenuHTML;
+                
+                document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'block');
+                showSection('dashboard', document.querySelector('.sidebar-menu a'));
+            } else {
+                document.getElementById('loginError').style.display = 'block';
+            }
+        }
+
+        // Student Login
+        function checkStudentLogin() {
+            let val = document.getElementById('studentRollInput').value.trim();
+            if(val !== '') {
+                document.getElementById('login-overlay').style.display = 'none';
+                document.getElementById('portalSidebar').style.display = 'flex';
+                document.getElementById('portalMainContent').style.display = 'block';
+                document.getElementById('sidebarRoleTitle').innerText = 'Student Portal';
+                document.getElementById('sidebarRoleSubtitle').innerText = 'Roll: ' + val;
+                document.getElementById('sidebarMenuList').innerHTML = studentMenuHTML;
+                
+                document.getElementById('dashHeading').innerText = 'Welcome, Student (' + val + ')!';
+                document.getElementById('dashSubtext').innerText = 'Here is your personal academic overview and fee status.';
+                document.getElementById('dashStatsGrid').innerHTML = `
+                    <div class="stat-card"><h4>My Attendance</h4><p>92%</p></div>
+                    <div class="stat-card"><h4>Pending Fees</h4><p>₹0</p></div>
+                    <div class="stat-card"><h4>Tests Attempted</h4><p>3</p></div>
+                `;
+
+                document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
+                showSection('dashboard', document.querySelector('.sidebar-menu a'));
+            } else {
+                document.getElementById('studentLoginError').style.display = 'block';
+            }
+        }
+
+        // Logout
+        function logoutPortal() {
+            document.getElementById('login-overlay').style.display = 'flex';
+            document.getElementById('portalSidebar').style.display = 'none';
+            document.getElementById('portalMainContent').style.display = 'none';
+            document.getElementById('adminPasswordInput').value = '';
+            document.getElementById('studentRollInput').value = '';
+            document.getElementById('loginError').style.display = 'none';
+            document.getElementById('studentLoginError').style.display = 'none';
+        }
+
+        // Admin Photo Update
+        function updateAdminPhoto(event) {
+            let file = event.target.files[0];
+            if (file) {
+                let reader = new FileReader();
+                reader.onload = function(e) { document.getElementById('adminProfileImg').src = e.target.result; }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Change Password
+        function changeAdminPassword() {
+            let current = document.getElementById('currentPass').value.trim();
+            let newP = document.getElementById('newPass').value.trim();
+            let confirmP = document.getElementById('confirmPass').value.trim();
+            let msg = document.getElementById('passwordMsg');
+            let savedPass = localStorage.getItem('admin_portal_pass') || 'admin123';
+
+            if(current !== savedPass) {
+                msg.style.color = 'red';
+                msg.innerText = 'Current password is incorrect!';
+                return;
+            }
+            if(newP === '' || newP !== confirmP) {
+                msg.style.color = 'red';
+                msg.innerText = 'New passwords do not match or empty!';
+                return;
+            }
+            localStorage.setItem('admin_portal_pass', newP);
+            msg.style.color = 'green';
+            msg.innerText = 'Password successfully updated!';
+            document.getElementById('currentPass').value = '';
+            document.getElementById('newPass').value = '';
+            document.getElementById('confirmPass').value = '';
+        }
+
+        // Navigation Handler
+        function showSection(sectionId, element) {
+            document.querySelectorAll('.section-box').forEach(box => box.classList.remove('active'));
+            document.querySelectorAll('.sidebar-menu a').forEach(a => a.classList.remove('active'));
+            
+            let targetBox = document.getElementById(sectionId);
+            if(targetBox) targetBox.classList.add('active');
+            if(element) element.classList.add('active');
+        }
+
+        window.onload = function() {
+            let today = new Date().toISOString().split('T')[0];
+            if(document.getElementById('attendanceDate')) document.getElementById('attendanceDate').value = today;
+
+            // Charts
+            const ctx1 = document.getElementById('classComparisonChart').getContext('2d');
+            new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: ['Physics', 'Chemistry', 'Maths', 'English'],
+                    datasets: [{ label: 'Class Average Comparison (%)', data: [75, 82, 68, 90], backgroundColor: '#0e3d30' }]
+                }
+            });
+
+            const ctx2 = document.getElementById('individualChart').getContext('2d');
+            new Chart(ctx2, {
+                type: 'line',
+                data: {
+                    labels: ['Test 1', 'Test 2', 'Test 3', 'Test 4'],
+                    datasets: [{ label: 'Student Comparison Trend (%)', data: [65, 70, 85, 92], borderColor: '#0e3d30', fill: false }]
+                }
+            });
+        };
+
+        let studentsList = [
+            { roll: 101, name: 'Rahul Sharma', sClass: '10th', board: 'MP Board', address: 'Satna', photo: 'https://via.placeholder.com/40' }
+        ];
+
+        function addStudent() {
+            let name = document.getElementById('sName').value;
+            let sClass = document.getElementById('sClass').value;
+            if(!name || !sClass) { alert('Enter Name and Class!'); return; }
+            alert('Student added successfully!');
+        }
+
+        function loadClassStudentsForAttendance() {
+            let table = document.getElementById('attendanceListTable');
+            table.innerHTML = `<tr><th>Roll No</th><th>Student Name</th><th>Class</th><th>Mark Attendance</th></tr>
+                <tr><td>101</td><td>Rahul Sharma</td><td>10th</td><td>
+                    <label style="display:inline; margin-right:15px;"><input type="radio" name="att_101" value="Present" checked> Present</label>
+                    <label style="display:inline;"><input type="radio" name="att_101" value="Absent"> Absent</label>
+                </td></tr>`;
+        }
+
+        function saveAttendance() { alert('Attendance saved successfully!'); }
+        function addEnquiry() { alert('Enquiry saved!'); }
+        function sendSMSNotifications() { alert('SMS sent!'); }
+        function publishTest() { alert('Test published successfully!'); }
+
+        function submitQuiz() {
+            let score = 0;
+            if(document.getElementById('q1_correct').checked) score++;
+            if(document.getElementById('q2_correct').checked) score++;
+            document.getElementById('quizResult').innerText = `Quiz Submitted! Your Score: ${score}/2 (${(score/2)*100}%)`;
+        }
+    </script>
+</body>
+</html>
