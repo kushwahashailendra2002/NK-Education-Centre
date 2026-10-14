@@ -210,7 +210,7 @@
             <div style="width: 70%; margin: auto; margin-top: 15px;"><canvas id="individualChart"></canvas></div>
         </div>
 
-        <!-- 7. SMS & Notification Center (Customizable SMS Text) -->
+        <!-- 7. SMS & Notification Center -->
         <div id="sms-center" class="section-box admin-only">
             <h2>SMS & Notification Center</h2>
             <div class="form-group">
@@ -264,7 +264,7 @@
             <div id="quizResult" style="margin-top: 20px; font-weight: bold; font-size: 1.2rem;"></div>
         </div>
 
-        <!-- 10. Admin Settings (Only Password Change & SMS Template Configuration) -->
+        <!-- 10. Admin Settings -->
         <div id="admin-settings" class="section-box admin-only">
             <h2>Admin Settings & Security</h2>
             <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 20px;">
@@ -312,23 +312,33 @@
         `;
 
         function switchLoginTab(role) {
-            document.getElementById('tabAdmin').classList.remove('active');
-            document.getElementById('tabStudent').classList.remove('active');
-            document.getElementById('adminLoginForm').classList.remove('active');
-            document.getElementById('studentLoginForm').classList.remove('active');
+            let tabAdmin = document.getElementById('tabAdmin');
+            let tabStudent = document.getElementById('tabStudent');
+            let adminForm = document.getElementById('adminLoginForm');
+            let studentForm = document.getElementById('studentLoginForm');
+            
+            if(!tabAdmin || !tabStudent || !adminForm || !studentForm) return;
+
+            tabAdmin.classList.remove('active');
+            tabStudent.classList.remove('active');
+            adminForm.classList.remove('active');
+            studentForm.classList.remove('active');
             
             if(role === 'admin') {
-                document.getElementById('tabAdmin').classList.add('active');
-                document.getElementById('adminLoginForm').classList.add('active');
+                tabAdmin.classList.add('active');
+                adminForm.classList.add('active');
             } else {
-                document.getElementById('tabStudent').classList.add('active');
-                document.getElementById('studentLoginForm').classList.add('active');
+                tabStudent.classList.add('active');
+                studentForm.classList.add('active');
             }
         }
 
-        // Admin Login
         function checkAdminPassword() {
-            let pass = document.getElementById('adminPasswordInput').value.trim();
+            let passInput = document.getElementById('adminPasswordInput');
+            let errorMsg = document.getElementById('loginError');
+            if(!passInput) return;
+
+            let pass = passInput.value.trim();
             let savedPass = localStorage.getItem('admin_portal_pass') || 'admin123';
             
             if(pass === savedPass || pass === 'nk@2026') {
@@ -342,13 +352,16 @@
                 document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'block');
                 showSection('dashboard', document.querySelector('.sidebar-menu a'));
             } else {
-                document.getElementById('loginError').style.display = 'block';
+                if(errorMsg) errorMsg.style.display = 'block';
             }
         }
 
-        // Student Login
         function checkStudentLogin() {
-            let val = document.getElementById('studentRollInput').value.trim();
+            let rollInput = document.getElementById('studentRollInput');
+            let errorMsg = document.getElementById('studentLoginError');
+            if(!rollInput) return;
+
+            let val = rollInput.value.trim();
             if(val !== '') {
                 document.getElementById('login-overlay').style.display = 'none';
                 document.getElementById('portalSidebar').style.display = 'flex';
@@ -368,22 +381,20 @@
                 document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
                 showSection('dashboard', document.querySelector('.sidebar-menu a'));
             } else {
-                document.getElementById('studentLoginError').style.display = 'block';
+                if(errorMsg) errorMsg.style.display = 'block';
             }
         }
 
-        // Logout
         function logoutPortal() {
             document.getElementById('login-overlay').style.display = 'flex';
             document.getElementById('portalSidebar').style.display = 'none';
             document.getElementById('portalMainContent').style.display = 'none';
-            document.getElementById('adminPasswordInput').value = '';
-            document.getElementById('studentRollInput').value = '';
-            document.getElementById('loginError').style.display = 'none';
-            document.getElementById('studentLoginError').style.display = 'none';
+            if(document.getElementById('adminPasswordInput')) document.getElementById('adminPasswordInput').value = '';
+            if(document.getElementById('studentRollInput')) document.getElementById('studentRollInput').value = '';
+            if(document.getElementById('loginError')) document.getElementById('loginError').style.display = 'none';
+            if(document.getElementById('studentLoginError')) document.getElementById('studentLoginError').style.display = 'none';
         }
 
-        // Admin Photo Update
         function updateAdminPhoto(event) {
             let file = event.target.files[0];
             if (file) {
@@ -393,7 +404,6 @@
             }
         }
 
-        // Change Password
         function changeAdminPassword() {
             let current = document.getElementById('currentPass').value.trim();
             let newP = document.getElementById('newPass').value.trim();
@@ -430,7 +440,64 @@
             msg.innerText = 'SMS Template configuration saved successfully!';
         }
 
-        // Navigation Handler
         function showSection(sectionId, element) {
             document.querySelectorAll('.section-box').forEach(box => box.classList.remove('active'));
-            document.querySelectorAll('.sidebar
+            document.querySelectorAll('.sidebar-menu a').forEach(a => a.classList.remove('active'));
+            
+            let targetBox = document.getElementById(sectionId);
+            if(targetBox) targetBox.classList.add('active');
+            if(element) element.classList.add('active');
+        }
+
+        window.onload = function() {
+            let today = new Date().toISOString().split('T')[0];
+            if(document.getElementById('attendanceDate')) document.getElementById('attendanceDate').value = today;
+
+            const ctx1 = document.getElementById('classComparisonChart').getContext('2d');
+            new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: ['Physics', 'Chemistry', 'Maths', 'English'],
+                    datasets: [{ label: 'Class Average Comparison (%)', data: [75, 82, 68, 90], backgroundColor: '#0e3d30' }]
+                }
+            });
+
+            const ctx2 = document.getElementById('individualChart').getContext('2d');
+            new Chart(ctx2, {
+                type: 'line',
+                data: {
+                    labels: ['Test 1', 'Test 2', 'Test 3', 'Test 4'],
+                    datasets: [{ label: 'Student Comparison Trend (%)', data: [65, 70, 85, 92], borderColor: '#0e3d30', fill: false }]
+                }
+            });
+        };
+
+        function addStudent() {
+            let name = document.getElementById('sName').value;
+            let sClass = document.getElementById('sClass').value;
+            if(!name || !sClass) { alert('Enter Name and Class!'); return; }
+            alert('Student added successfully!');
+        }
+
+        function loadClassStudentsForAttendance() {
+            let table = document.getElementById('attendanceListTable');
+            table.innerHTML = `<tr><th>Roll No</th><th>Student Name</th><th>Class</th><th>Mark Attendance</th></tr>
+                <tr><td>101</td><td>Rahul Sharma</td><td>10th</td><td>
+                    <label style="display:inline; margin-right:15px;"><input type="radio" name="att_101" value="Present" checked> Present</label>
+                    <label style="display:inline;"><input type="radio" name="att_101" value="Absent"> Absent</label>
+                </td></tr>`;
+        }
+
+        function saveAttendance() { alert('Attendance saved successfully!'); }
+        function addEnquiry() { alert('Enquiry saved!'); }
+        function sendSMSNotifications() { alert('SMS sent successfully!'); }
+
+        function submitQuiz() {
+            let score = 0;
+            if(document.getElementById('q1_correct').checked) score++;
+            if(document.getElementById('q2_correct').checked) score++;
+            document.getElementById('quizResult').innerText = `Quiz Submitted! Your Score: ${score}/2 (${(score/2)*100}%)`;
+        }
+    </script>
+</body>
+</html>
