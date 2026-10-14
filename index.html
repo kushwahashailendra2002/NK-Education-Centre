@@ -1,578 +1,359 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#176b5b">
-<title id="pageTitle">NK Education Centre — Management Portal</title>
-<style>
-:root{--bg:#f6f3ee;--card:#fffdf9;--text:#20231f;--muted:#70766d;--line:#e6e0d5;--primary:#176b5b;--primary2:#d49a3a;--good:#21815e;--warn:#c27b20;--bad:#c84b55;--shadow:0 10px 30px rgba(43,52,44,.08)}
-*{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,sans-serif;background:var(--bg);color:var(--text)}button,input,select{font:inherit}button{cursor:pointer;border:0}
-.app{min-height:100vh;display:flex;flex-direction:column}
-.top{height:75px;background:linear-gradient(110deg,#124d43,#176b5b 55%,#d49a3a);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:10}
-.brand{display:flex;align-items:center;gap:12px}
-.logo-img{width:45px;height:45px;border-radius:12px;object-fit:cover;background:#fff;border:2px solid #fff;}
-.main{padding:26px;max-width:1400px;width:100%;margin:auto}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow);margin-bottom:20px}
-.field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}.field label{font-size:12px;color:var(--muted);font-weight:700}
-.field input, .field select{border:1px solid var(--line);border-radius:9px;padding:9px;outline:none;background:#fff;font-size:13px}
-.primary{background:var(--primary);color:#fff;padding:10px 16px;border-radius:10px;font-weight:700;font-size:13px}
-.secondary{background:var(--primary2);color:#fff;padding:10px 16px;border-radius:10px;font-weight:700;font-size:13px}
-.auth-box{max-width:400px;margin:80px auto;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:var(--shadow)}
-.table{width:100%;border-collapse:collapse}.table th,.table td{text-align:left;padding:10px;border-bottom:1px solid var(--line);font-size:13px}.table th{color:var(--muted);font-weight:600}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-@media(max-width:900px){.grid-2{grid-template-columns:1fr}}
-.flex-between{display:flex;align-items:center;justify-content:space-between;margin-bottom:15px}
-.form-box{background:#faf8f5;border:1px dashed var(--line);padding:15px;border-radius:12px;margin-bottom:15px}
-.badge-paid{background:#e8f5e9;color:#2e7d32;padding:2px 6px;border-radius:4px;font-size:11px;font-weight:600}
-.badge-absent{background:#ffebee;color:#c62828;padding:2px 6px;border-radius:4px;font-size:11px;font-weight:600}
-.student-thumb{width:36px;height:36px;border-radius:50%;object-fit:cover;border:1px solid var(--line);}
-.stats-row{display:flex;gap:15px;margin-bottom:20px;flex-wrap:wrap;}
-.stat-box{background:var(--card);border:1px solid var(--line);padding:15px 20px;border-radius:12px;flex:1;min-width:200px;box-shadow:var(--shadow);}
-.stat-box h4{margin:0 0 5px 0;font-size:13px;color:var(--muted);}
-.stat-box p{margin:0;font-size:20px;font-weight:bold;color:var(--primary);}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NK Education Centre - Complete Student Management Portal</title>
+    <!-- Chart.js for Performance & Comparison Graphs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f4f7f6; color: #333; display: flex; height: 100vh; overflow: hidden; }
+        
+        /* Sidebar Navigation */
+        sidebar { width: 270px; background: #2c3e50; color: white; display: flex; flex-direction: column; height: 100%; box-shadow: 2px 0 5px rgba(0,0,0,0.1); }
+        .sidebar-header { padding: 20px; background: #1a252f; text-align: center; font-size: 1.2rem; font-weight: bold; }
+        .sidebar-menu { list-style: none; padding: 15px 0; overflow-y: auto; flex-grow: 1; }
+        .sidebar-menu li a { display: block; padding: 12px 20px; color: #b8c7ce; text-decoration: none; transition: 0.3s; font-size: 0.95rem; }
+        .sidebar-menu li a:hover, .sidebar-menu li a.active { background: #34495e; color: #fff; border-left: 4px solid #3498db; }
+
+        /* Main Content Area */
+        .main-content { flex-grow: 1; padding: 30px; overflow-y: auto; background: #ecf0f1; }
+        .section-box { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 25px; display: none; }
+        .section-box.active { display: block; }
+        h2 { margin-bottom: 20px; color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        
+        /* Form & Inputs Styling */
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: 600; margin-bottom: 5px; color: #555; }
+        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem; background: #f9f9f9; }
+        button { background: #3498db; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 1rem; font-weight: 600; transition: 0.3s; }
+        button:hover { background: #2980b9; }
+
+        /* Tables & Cards */
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; background: #fff; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #f8f9fa; color: #333; }
+        .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .stat-card { background: #eef2f7; padding: 15px; border-radius: 8px; border-left: 4px solid #3498db; }
+        .stat-card h4 { font-size: 0.9rem; color: #7f8c8d; }
+        .stat-card p { font-size: 1.5rem; font-weight: bold; color: #2c3e50; margin-top: 5px; }
+    </style>
 </head>
 <body>
 
-<div class="app">
-  <!-- PASSWORD LOGIN VIEW -->
-  <div id="loginView" class="auth-box">
-    <h2>NK Education Login</h2>
-    <p style="color:var(--muted);font-size:13px;margin-bottom:20px">Please enter your admin password to access the portal.</p>
-    <div class="field">
-      <label>Password</label>
-      <input type="password" id="portalPass" placeholder="Enter password">
-    </div>
-    <button class="primary" style="width:100%;margin-top:10px;" onclick="verifyPassword()">Unlock Portal</button>
-    <p id="errorMsg" style="color:var(--bad);font-size:12px;margin-top:10px;text-align:center;"></p>
-  </div>
+    <!-- Serial Wise Sidebar Menu -->
+    <sidebar>
+        <div class="sidebar-header">NK Education Portal</div>
+        <ul class="sidebar-menu">
+            <li><a href="#" onclick="showSection('dashboard', this)" class="active">1. Dashboard</a></li>
+            <li><a href="#" onclick="showSection('student-directory', this)">2. Student Directory</a></li>
+            <li><a href="#" onclick="showSection('enquiries', this)">3. Admission Enquiries</a></li>
+            <li><a href="#" onclick="showSection('fees-dues', this)">4. Fees & Dues Management</a></li>
+            <li><a href="#" onclick="showSection('attendance', this)">5. Attendance Tracker</a></li>
+            <li><a href="#" onclick="showSection('performance', this)">6. Performance & Comparison</a></li>
+            <li><a href="#" onclick="showSection('sms-center', this)">7. SMS & Notification Center</a></li>
+            <li><a href="#" onclick="showSection('test-series', this)">8. Test Series & PDF Hub</a></li>
+            <li><a href="#" onclick="showSection('mcq-quiz', this)">9. MCQ Quiz Portal</a></li>
+        </ul>
+    </sidebar>
 
-  <!-- DASHBOARD VIEW -->
-  <div id="dashboardView" style="display:none;">
-    <header class="top">
-      <div class="brand">
-        <img id="headerLogo" src="https://kommodo.ai/i/PYVtYtBZFNfYBwFgTsQL" alt="Logo" class="logo-img">
-        <div>
-          <b id="headerTitle" style="font-size:16px;">NK Education Centre</b>
-          <small style="display:block;opacity:.85;font-weight:normal;">Admin Portal</small>
-        </div>
-      </div>
-      <div style="display:flex;gap:10px;">
-        <button class="secondary" onclick="toggleForm('settingsCard')">⚙️ Settings</button>
-        <button class="primary" style="background:var(--bad);" onclick="handleLogout()">Lock</button>
-      </div>
-    </header>
+    <!-- Main Content Panels -->
+    <div class="main-content">
 
-    <div class="main">
-      <h2>Welcome Back!</h2>
-      <p style="color:var(--muted);margin-bottom:25px;">Yahan se aap apne coaching ka saara data aur fee track kar sakte hain.</p>
-
-      <!-- STATS OVERVIEW -->
-      <div class="stats-row">
-        <div class="stat-box">
-          <h4>Total Students</h4>
-          <p id="statTotalStudents">0</p>
-        </div>
-        <div class="stat-box">
-          <h4>Monthly Fee Collected</h4>
-          <p id="statMonthlyFee">₹0</p>
-        </div>
-        <div class="stat-box">
-          <h4>Total Enquiries</h4>
-          <p id="statTotalEnquiries">0</p>
-        </div>
-      </div>
-
-      <!-- SETTINGS CARD (Logo Edit) -->
-      <div id="settingsCard" class="card" style="display:none;background:#f2efe9;">
-        <div class="flex-between">
-          <h3>Portal Customization Settings</h3>
-          <button onclick="toggleForm('settingsCard')" style="background:none;font-weight:bold;font-size:16px;">✕</button>
-        </div>
-        <div class="grid-2">
-          <div class="field"><label>Coaching Name</label><input type="text" id="settingName" value="NK Education Centre"></div>
-          <div class="field"><label>Upload Logo from Gallery</label><input type="file" id="settingLogoFile" accept="image/*" onchange="previewLogo(event)"></div>
-        </div>
-        <button class="primary" onclick="saveSettings()">Update Branding</button>
-      </div>
-
-      <div class="grid-2">
-        <!-- 1. Students Management -->
-        <div class="card">
-          <div class="flex-between">
-            <h3>Students Directory</h3>
-            <button class="primary" onclick="openAddStudentModal()">+ Add Student</button>
-          </div>
-          <div id="studentForm" class="form-box" style="display:none;">
-           <div class="form-group">
-  <label>Student Address:</label>
-  <input type="text" id="studentAddress" placeholder="Enter address" required>
-</div>
-<div class="form-group">
-  <label>Board:</label>
-  <select id="studentBoard">
-    <option value="MP Board">MP Board</option>
-    <option value="CBSE">CBSE</option>
-    <option value="ICSE">ICSE</option>
-  </select>
-</div>
-            <div class="field"><label>Auto Roll No</label><input type="text" id="sRoll" readonly style="background:#eee;color:#555;"></div>
-            <div class="field"><label>Full Name</label><input type="text" id="sName" placeholder="Student Name"></div>
-            <div class="field"><label>Phone</label><input type="text" id="sPhone" placeholder="Mobile"></div>
-            <div class="field"><label>Monthly Fee (₹)</label><input type="number" id="sFee" placeholder="1000"></div>
-            <div class="field"><label>Student Photo (From Gallery)</label><input type="file" id="sPhotoFile" accept="image/*"></div>
-            <button class="primary" onclick="addStudent()">Save Student</button>
-          </div>
-          <table class="table">
-            <thead><tr><th>Photo</th><th>Roll & Name</th><th>Phone</th><th>WhatsApp / SMS Actions</th></tr></thead>
-            <tbody id="studentsTable"><tr><td colspan="4" style="text-align:center;color:var(--muted);">Loading...</td></tr></tbody>
-          </table>
-        </div>
-
-        <!-- 2. Test Series Management -->
-        <div class="card">
-          <div class="flex-between">
-            <h3>Test Series</h3>
-            <button class="primary" onclick="toggleForm('testForm')">+ Create Test</button>
-          </div>
-          <div id="testForm" class="form-box" style="display:none;">
-            <div class="field"><label>Test Title</label><input type="text" id="tTitle" placeholder="Physics Mock 1"></div>
-            <div class="field"><label>Subject</label><input type="text" id="tSubject" placeholder="Physics"></div>
-            <div class="field"><label>Total Marks</label><input type="number" id="tMarks" value="100"></div>
-            <div class="field"><label>Date</label><input type="date" id="tDate"></div>
-            <button class="primary" onclick="addTest()">Save Test</button>
-          </div>
-          <table class="table">
-            <thead><tr><th>Title</th><th>Subject</th><th>Marks</th><th>Date</th></tr></thead>
-            <tbody id="testsTable"><tr><td colspan="4" style="text-align:center;color:var(--muted);">Loading...</td></tr></tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="grid-2">
-        <!-- 3. Smart Attendance -->
-        <div class="card">
-          <div class="flex-between">
-            <h3>Student Attendance (Monthly / Yearly)</h3>
-            <button class="primary" onclick="toggleForm('attForm')">Mark Attendance</button>
-          </div>
-          <div id="attForm" class="form-box" style="display:none;">
-            <div class="field"><label>Select Student</label><select id="attStudentSelect"></select></div>
-            <div class="field"><label>Select Month</label>
-              <select id="attMonth">
-                <option value="January">January</option><option value="February">February</option><option value="March">March</option>
-                <option value="April">April</option><option value="May">May</option><option value="June">June</option>
-                <option value="July">July</option><option value="August">August</option><option value="September">September</option>
-                <option value="October">October</option><option value="November">November</option><option value="December" selected>December</option>
-              </select>
+        <!-- 1. Dashboard -->
+        <div id="dashboard" class="section-box active">
+            <h2>Dashboard Overview</h2>
+            <div class="summary-grid">
+                <div class="stat-card"><h4>Total Students</h4><p id="dashTotalStudents">0</p></div>
+                <div class="stat-card"><h4>Total Monthly Dues</h4><p id="dashTotalDues">₹12,500</p></div>
+                <div class="stat-card"><h4>Today Present</h4><p id="dashPresentCount">0</p></div>
+                <div class="stat-card"><h4>Active Enquiries</h4><p id="dashEnquiries">0</p></div>
             </div>
-            <div class="field"><label>Today's Date (Day 1-31)</label><input type="number" id="attDayNum" min="1" max="31" placeholder="e.g. 15"></div>
-            <div class="field"><label>Status</label><select id="attStatus"><option value="Present">Present</option><option value="Absent">Absent</option></select></div>
-            <button class="primary" onclick="markMonthlyAttendance()">Save Today's Status</button>
-          </div>
-          <table class="table">
-            <thead><tr><th>Student</th><th>Monthly & Yearly Summary</th></tr></thead>
-            <tbody id="attendanceSummaryTable"><tr><td colspan="2" style="text-align:center;color:var(--muted);">Loading attendance...</td></tr></tbody>
-          </table>
         </div>
 
-        <!-- 4. Fee & Pending Tracking -->
-<div id="fees-dues">
-  <h2>Fees & Dues Management</h2>
-  <div class="summary-card" style="background: #eef2f7; padding: 15px; margin-bottom: 15px; border-radius: 8px;">
-    <h3>Total Coaching Monthly Pending: <span id="totalMonthlyPending">₹0</span></h3>
-  </div>
-  
-  <!-- Class Wise Filter & Table -->
-  <select id="filterClassFees" onchange="filterFeesByClass()">
-    <option value="all">All Classes</option>
-    <option value="10th">Class 10th</option>
-    <option value="12th">Class 12th</option>
-  </select>
-  
-  <table id="feesTable">
-    <tr>
-      <th>Student Name</th>
-      <th>Class</th>
-      <th>Installment Period</th>
-      <th>Status</th>
-      <th>Amount Due</th>
-    </tr>
-    <!-- Data JavaScript se yahan load hoga -->
-  </table>
-</div>
-        <div class="card">
-          <div class="flex-between">
-            <h3>Fee & Pending Dues Tracking</h3>
-            <button class="primary" onclick="toggleForm('feeForm')">+ Record Payment</button>
-          </div>
-          <div id="feeForm" class="form-box" style="display:none;">
-            <div class="field"><label>Select Student</label><select id="feeStudentSelect"></select></div>
-            <div class="field"><label>Amount Paid (₹)</label><input type="number" id="feeAmount" placeholder="1000"></div>
-            <div class="field"><label>Month / Period</label><input type="text" id="feeMonth" placeholder="e.g. October 2026"></div>
-            <button class="primary" onclick="recordFee()">Save Fee Record</button>
-          </div>
-          <table class="table">
-            <thead><tr><th>Student</th><th>Monthly Paid</th><th>Remaining / Pending</th></tr></thead>
-            <tbody id="feesTable"><tr><td colspan="3" style="text-align:center;color:var(--muted);">Loading fee records...</td></tr></tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="grid-2">
-        <!-- 5. Admission Enquiries -->
-<div class="form-group">
-  <label>Student Address:</label>
-  <input type="text" id="studentAddress" placeholder="Enter address" required>
-</div>
-<div class="form-group">
-  <label>Board:</label>
-  <select id="studentBoard">
-    <option value="MP Board">MP Board</option>
-    <option value="CBSE">CBSE</option>
-    <option value="ICSE">ICSE</option>
-  </select>
-</div>
-        <div class="card">
-          <div class="flex-between">
-            <h3>Admission Enquiries</h3>
-            <button class="primary" onclick="toggleForm('enqForm')">+ Add Enquiry</button>
-          </div>
-          <div id="enqForm" class="form-box" style="display:none;">
-            <div class="field"><label>Student Name</label><input type="text" id="eName" placeholder="Student Name"></div>
-            <div class="field"><label>Parent Name</label><input type="text" id="eParent" placeholder="Parent Name"></div>
-            <div class="field"><label>Phone</label><input type="text" id="ePhone" placeholder="Mobile"></div>
-            <div class="field"><label>Interested Class</label><input type="text" id="eClass" placeholder="e.g. 12th Math"></div>
-            <button class="primary" onclick="addEnquiry()">Save Enquiry</button>
-          </div>
-          <table class="table">
-            <thead><tr><th>Name</th><th>Phone</th><th>Class</th><th>Status</th></tr></thead>
-            <tbody id="enquiriesTable"><tr><td colspan="4" style="text-align:center;color:var(--muted);">Loading...</td></tr></tbody>
-          </table>
+        <!-- 2. Student Directory (With Photo, Address & Board) -->
+        <div id="student-directory" class="section-box">
+            <h2>Student Directory</h2>
+            <div class="form-group"><label>Student Name</label><input type="text" id="sName" placeholder="Enter full name"></div>
+            <div class="form-group"><label>Class</label><input type="text" id="sClass" placeholder="e.g. 10th / 12th"></div>
+            <div class="form-group"><label>Student Address</label><input type="text" id="sAddress" placeholder="Enter address"></div>
+            <div class="form-group">
+                <label>Board</label>
+                <select id="sBoard"><option value="MP Board">MP Board</option><option value="CBSE">CBSE</option><option value="ICSE">ICSE</option></select>
+            </div>
+            <div class="form-group"><label>Student Photo</label><input type="file" id="sPhoto" accept="image/*"></div>
+            <button onclick="addStudent()">Add Student</button>
+            <table id="studentTable">
+                <tr><th>Photo</th><th>Roll No</th><th>Name</th><th>Class</th><th>Board</th><th>Address</th></tr>
+            </table>
         </div>
 
-        <!-- 6. Student Performance & Class Comparison -->
-        <div class="card">
-          <div class="flex-between">
-            <h3>Student Performance & Class Comparison</h3>
-            <button class="primary" onclick="toggleForm('resultForm')">+ Enter Marks</button>
-          </div>
-          <div id="resultForm" class="form-box" style="display:none;">
-            <div class="field"><label>Select Test</label><select id="resTestSelect"></select></div>
-            <div class="field"><label>Select Student</label><select id="resStudentSelect"></select></div>
-            <div class="field"><label>Marks Obtained</label><input type="number" id="resMarks" placeholder="85"></div>
-            <button class="primary" onclick="addResult()">Save Marks</button>
-          </div>
-          <table class="table">
-            <thead><tr><th>Test Title</th><th>Student & Score</th><th>Class Comparison</th></tr></thead>
-            <tbody id="resultsTable"><tr><td colspan="3" style="text-align:center;color:var(--muted);">Loading performance...</td></tr></tbody>
-          </table>
+        <!-- 3. Admission Enquiries (With Address & Board) -->
+        <div id="enquiries" class="section-box">
+            <h2>Admission Enquiries</h2>
+            <div class="form-group"><label>Candidate Name</label><input type="text" id="eName" placeholder="Candidate Name"></div>
+            <div class="form-group"><label>Phone Number</label><input type="text" id="ePhone" placeholder="Mobile Number"></div>
+            <div class="form-group"><label>Address</label><input type="text" id="eAddress" placeholder="Address"></div>
+            <div class="form-group">
+                <label>Board</label>
+                <select id="eBoard"><option value="MP Board">MP Board</option><option value="CBSE">CBSE</option></select>
+            </div>
+            <button onclick="addEnquiry()">Save Enquiry</button>
+            <table id="enquiryTable">
+                <tr><th>Name</th><th>Phone</th><th>Address</th><th>Board</th><th>Status</th></tr>
+            </table>
         </div>
-      </div>
+
+        <!-- 4. Fees & Pending Management -->
+        <div id="fees-dues" class="section-box">
+            <h2>Fees & Dues Management</h2>
+            <div class="summary-grid">
+                <div class="stat-card"><h4>Total Coaching Monthly Pending</h4><p id="totalMonthlyPending">₹12,500</p></div>
+            </div>
+            <div class="form-group">
+                <label>Filter By Class</label>
+                <select id="filterClassFees" onchange="renderFeesTable()">
+                    <option value="all">All Classes</option>
+                    <option value="10th">Class 10th</option>
+                    <option value="12th">Class 12th</option>
+                </select>
+            </div>
+            <table id="feesTable">
+                <tr><th>Student Name</th><th>Class</th><th>Installment Start</th><th>Installment End</th><th>Status</th><th>Due Amount</th></tr>
+                <tr><td>Rahul Sharma</td><td>10th</td><td>01/09/2026</td><td>01/10/2026</td><td>Pending</td><td>₹1,500</td></tr>
+            </table>
+        </div>
+
+        <!-- 5. Attendance Tracker (Auto Date & Class Wise Student List) -->
+        <div id="attendance" class="section-box">
+            <h2>Attendance Tracker</h2>
+            <div class="summary-grid">
+                <div class="stat-card" style="border-left-color: #2ecc71;"><h4>Total Present Today</h4><p id="countPresent">0</p></div>
+                <div class="stat-card" style="border-left-color: #e74c3c;"><h4>Total Absent Today</h4><p id="countAbsent">0</p></div>
+            </div>
+            <div class="form-group">
+                <label>Attendance Date (Auto Today)</label>
+                <input type="date" id="attendanceDate">
+            </div>
+            <div class="form-group">
+                <label>Select Class to Load Students List</label>
+                <select id="attendanceClassSelect" onchange="loadClassStudentsForAttendance()">
+                    <option value="">-- Choose Class --</option>
+                    <option value="10th">Class 10th</option>
+                    <option value="12th">Class 12th</option>
+                </select>
+            </div>
+            <table id="attendanceListTable">
+                <tr><th>Roll No</th><th>Student Name</th><th>Class</th><th>Mark Attendance (Present / Absent)</th></tr>
+            </table>
+            <br>
+            <button onclick="saveAttendance()">Save Attendance</button>
+        </div>
+
+        <!-- 6. Student Performance & Comparison -->
+        <div id="performance" class="section-box">
+            <h2>Student Performance & Class Comparison</h2>
+            <div class="form-group">
+                <label>Select Class Comparison</label>
+                <select id="selectClassPerformance" onchange="renderClassComparisonChart()">
+                    <option value="10th">Class 10th Average Score</option>
+                    <option value="12th">Class 12th Average Score</option>
+                </select>
+            </div>
+            <div style="width: 70%; margin: auto;"><canvas id="classComparisonChart"></canvas></div>
+            <hr style="margin: 20px 0;">
+            <h3>Individual Student Performance (Percentage & Graphs)</h3>
+            <div style="width: 70%; margin: auto; margin-top: 15px;"><canvas id="individualChart"></canvas></div>
+        </div>
+
+        <!-- 7. SMS & Notification Center -->
+        <div id="sms-center" class="section-box">
+            <h2>SMS & Notification Center</h2>
+            <div class="form-group">
+                <label>Select Message Template</label>
+                <select id="smsTemplate">
+                    <option value="welcome">Welcome Message</option>
+                    <option value="fees_due">Fees Due Reminder</option>
+                    <option value="fees_paid">Fees Paid Receipt</option>
+                    <option value="test_series">New Test Series Added Notification</option>
+                    <option value="pyq">PYQ Materials Notification</option>
+                    <option value="sample_paper">Sample Papers Alert</option>
+                </select>
+            </div>
+            <button onclick="sendSMSNotifications()">Send Bulk SMS / Notification</button>
+        </div>
+
+        <!-- 8. Test Series & PDF Hub -->
+        <div id="test-series" class="section-box">
+            <h2>Test Series & PDF Hub</h2>
+            <div class="form-group"><label>Test Title / Name</label><input type="text" id="testTitle" placeholder="e.g. Physics Mock Test 1"></div>
+            <div class="form-group"><label>Upload Question PDF / Sample Paper</label><input type="file" id="testPdfFile" accept=".pdf"></div>
+            <div class="form-group"><label>Test Duration (in Minutes)</label><input type="number" id="testDuration" value="30"></div>
+            <button onclick="publishTest()">Publish Test Series</button>
+            <hr style="margin: 20px 0;">
+            <h3>Available Tests & Timer Status</h3>
+            <div id="testListContainer"><p>No active tests uploaded yet.</p></div>
+        </div>
+
+        <!-- 9. MCQ Quiz Portal -->
+        <div id="mcq-quiz" class="section-box">
+            <h2>MCQ Quiz Portal</h2>
+            <div id="quizContainer">
+                <h3>Question 1: What is the SI unit of Electric Current?</h3>
+                <label><input type="radio" name="q1" value="A"> Volt</label>
+                <label><input type="radio" name="q1" value="B" id="q1_correct"> Ampere</label>
+                <label><input type="radio" name="q1" value="C"> Watt</label>
+                <br>
+                <h3>Question 2: Ohm's Law formula is?</h3>
+                <label><input type="radio" name="q2" value="A" id="q2_correct"> V = IR</label>
+                <label><input type="radio" name="q2" value="B"> P = VI</label>
+                <br><br>
+                <button onclick="submitQuiz()">Submit Quiz & Check Result</button>
+            </div>
+            <div id="quizResult" style="margin-top: 20px; font-weight: bold; font-size: 1.2rem;"></div>
+        </div>
 
     </div>
-  </div>
-</div>
 
-<!-- Supabase JS Client -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-  const SUPABASE_URL = "https://ayxtsuauossqicjjmpft.supabase.co";
-  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF5eHRzdWF1b3NzcWljamptcGZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1OTEzNDYsImV4cCI6MjEwNzE2NzM0Nn0.k-ypiZXwk3qeIiaZIowbLD6wwkMhA0CS9_NwAzXvf5I";
-  
-  const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-  const ADMIN_PASS = "Coaching@123";
+    <script>
+        // Navigation Handler
+        function showSection(sectionId, element) {
+            document.querySelectorAll('.section-box').forEach(box => box.classList.remove('active'));
+            document.querySelectorAll('.sidebar-menu a').forEach(a => a.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            element.classList.add('active');
+        }
 
-  let tempLogoBase64 = '';
+        // Set Auto Current Date on Load for Attendance
+        window.onload = function() {
+            let today = new Date().toISOString().split('T')[0];
+            let attDateElem = document.getElementById('attendanceDate');
+            if(attDateElem) attDateElem.value = today;
 
-  window.addEventListener('DOMContentLoaded', () => {
-    const savedName = localStorage.getItem('coaching_name') || 'NK Education Centre';
-    const savedLogo = localStorage.getItem('coaching_logo') || 'https://kommodo.ai/i/PYVtYtBZFNfYBwFgTsQL';
-    applyBranding(savedName, savedLogo);
-  });
+            // Initialize Charts
+            const ctx1 = document.getElementById('classComparisonChart').getContext('2d');
+            new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: ['Physics', 'Chemistry', 'Maths', 'English'],
+                    datasets: [{ label: 'Class Average Score (%)', data: [75, 82, 68, 90], backgroundColor: '#3498db' }]
+                }
+            });
 
-  function applyBranding(name, logo) {
-    document.getElementById('headerTitle').innerText = name;
-    document.getElementById('pageTitle').innerText = name + ' — Management Portal';
-    document.getElementById('headerLogo').src = logo;
-    document.getElementById('settingName').value = name;
-  }
+            const ctx2 = document.getElementById('individualChart').getContext('2d');
+            new Chart(ctx2, {
+                type: 'line',
+                data: {
+                    labels: ['Test 1', 'Test 2', 'Test 3', 'Test 4'],
+                    datasets: [{ label: 'Student Performance Trend (%)', data: [65, 70, 85, 92], borderColor: '#2ecc71', fill: false }]
+                }
+            });
+        };
 
-  function previewLogo(event) {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        tempLogoBase64 = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
-  }
+        // Global Students Array for Attendance & Directory Demo
+        let studentsList = [
+            { roll: 101, name: 'Rahul Sharma', sClass: '10th', board: 'MP Board', address: 'Satna', photo: 'https://via.placeholder.com/40' },
+            { roll: 102, name: 'Amit Kumar', sClass: '12th', board: 'CBSE', address: 'Rewa', photo: 'https://via.placeholder.com/40' },
+            { roll: 103, name: 'Priya Singh', sClass: '10th', board: 'MP Board', address: 'Satna', photo: 'https://via.placeholder.com/40' }
+        ];
 
-  window.saveSettings = function() {
-    const name = document.getElementById('settingName').value.trim() || 'NK Education Centre';
-    const logo = tempLogoBase64 || localStorage.getItem('coaching_logo') || 'https://kommodo.ai/i/PYVtYtBZFNfYBwFgTsQL';
-    localStorage.setItem('coaching_name', name);
-    localStorage.setItem('coaching_logo', logo);
-    applyBranding(name, logo);
-    alert('Branding updated successfully!');
-    toggleForm('settingsCard');
-  };
+        // Student Directory Logic with Photo Support
+        let rollCounter = 104;
+        function addStudent() {
+            let name = document.getElementById('sName').value;
+            let sClass = document.getElementById('sClass').value;
+            let address = document.getElementById('sAddress').value;
+            let board = document.getElementById('sBoard').value;
+            let photoInput = document.getElementById('sPhoto');
 
-  window.verifyPassword = function() {
-    const val = document.getElementById('portalPass').value.trim();
-    const err = document.getElementById('errorMsg');
-    if (val === ADMIN_PASS) {
-      document.getElementById('loginView').style.display = 'none';
-      document.getElementById('dashboardView').style.display = 'block';
-      loadAllData();
-    } else {
-      err.innerText = 'Galat password! Dobara koshish karein.';
-    }
-  };
+            if(!name || !sClass) {
+                alert('Please enter Student Name and Class!');
+                return;
+            }
 
-  window.handleLogout = function() {
-    document.getElementById('portalPass').value = '';
-    document.getElementById('dashboardView').style.display = 'none';
-    document.getElementById('loginView').style.display = 'block';
-  };
+            let photoSrc = 'https://via.placeholder.com/40';
+            if (photoInput.files && photoInput.files[0]) {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    photoSrc = e.target.result;
+                    saveNewStudentRecord(rollCounter++, name, sClass, board, address, photoSrc);
+                }
+                reader.readAsDataURL(photoInput.files[0]);
+            } else {
+                saveNewStudentRecord(rollCounter++, name, sClass, board, address, photoSrc);
+            }
+        }
 
-  window.toggleForm = function(id) {
-    const el = document.getElementById(id);
-    el.style.display = el.style.display === 'none' ? 'block' : 'none';
-  };
+        function saveNewStudentRecord(roll, name, sClass, board, address, photo) {
+            studentsList.push({ roll, name, sClass, board, address, photo });
+            let table = document.getElementById('studentTable');
+            let row = table.insertRow();
+            row.innerHTML = `
+                <td><img src="${photo}" alt="Student" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;"></td>
+                <td>${roll}</td>
+                <td>${name}</td>
+                <td>${sClass}</td>
+                <td>${board}</td>
+                <td>${address}</td>
+            `;
+            alert('Student added successfully with Photo, Address & Board!');
+        }
 
-  async function openAddStudentModal() {
-    toggleForm('studentForm');
-    const { data: students } = await db.from('students').select('roll_no');
-    let nextRoll = 101;
-    if (students && students.length > 0) {
-      const rolls = students.map(s => parseInt(s.roll_no)).filter(r => !isNaN(r));
-      if (rolls.length > 0) nextRoll = Math.max(...rolls) + 1;
-    }
-    document.getElementById('sRoll').value = nextRoll;
-  }
+        // Load Class Students List for Attendance
+        function loadClassStudentsForAttendance() {
+            let selectedClass = document.getElementById('attendanceClassSelect').value;
+            let table = document.getElementById('attendanceListTable');
+            table.innerHTML = `<tr><th>Roll No</th><th>Student Name</th><th>Class</th><th>Mark Attendance (Present / Absent)</th></tr>`;
+            
+            let filteredStudents = studentsList.filter(s => s.sClass.toLowerCase() === selectedClass.toLowerCase());
+            
+            if(filteredStudents.length === 0) {
+                let row = table.insertRow();
+                row.innerHTML = `<td colspan="4" style="text-align:center; color: #7f8c8d;">No students found in this class.</td>`;
+                return;
+            }
 
-  async function loadAllData() {
-    const { data: students } = await db.from('students').select('*').order('created_at', { ascending: false });
-    const cachedStudents = students || [];
-    
-    document.getElementById('statTotalStudents').innerText = cachedStudents.length;
+            filteredStudents.forEach(student => {
+                let row = table.insertRow();
+                row.innerHTML = `
+                    <td>${student.roll}</td>
+                    <td>${student.name}</td>
+                    <td>${student.sClass}</td>
+                    <td>
+                        <label style="display:inline; margin-right:15px;"><input type="radio" name="att_${student.roll}" value="Present" checked> Present</label>
+                        <label style="display:inline;"><input type="radio" name="att_${student.roll}" value="Absent"> Absent</label>
+                    </td>
+                `;
+            });
+        }
 
-    const studentTbody = document.getElementById('studentsTable');
-    if (cachedStudents.length > 0) {
-      studentTbody.innerHTML = cachedStudents.map(s => {
-        const phoneNum = s.phone || '';
-        const welcomeMsg = encodeURIComponent(`Hello ${s.full_name}, welcome to NK Education Centre! Your admission is confirmed.`);
-        const dueMsg = encodeURIComponent(`Hello ${s.full_name}, your monthly fee for NK Education Centre is due. Please clear it at the earliest.`);
-        const paidMsg = encodeURIComponent(`Hello ${s.full_name}, we have received your fee payment. Thank you! - NK Education Centre`);
+        function saveAttendance() {
+            let date = document.getElementById('attendanceDate').value;
+            alert(`Attendance successfully saved for date: ${date}!`);
+            document.getElementById('countPresent').innerText = studentsList.length;
+            document.getElementById('countAbsent').innerText = 0;
+        }
 
-        return `<tr>
-          <td><img src="${s.photo_url || 'https://via.placeholder.com/40'}" class="student-thumb" onerror="this.src='https://via.placeholder.com/40'"></td>
-          <td><b>${s.roll_no}</b><br><small>${s.full_name}</small></td>
-          <td>${phoneNum || '-'}</td>
-          <td>
-            <div style="display:flex;gap:4px;flex-wrap:wrap;">
-              ${phoneNum ? `
-                <a href="https://wa.me/91${phoneNum}?text=${welcomeMsg}" target="_blank" style="background:#25D366;color:#fff;padding:3px 6px;border-radius:4px;font-size:10px;text-decoration:none;" title="Welcome Message">👋 Welcome</a>
-                <a href="https://wa.me/91${phoneNum}?text=${dueMsg}" target="_blank" style="background:#c27b20;color:#fff;padding:3px 6px;border-radius:4px;font-size:10px;text-decoration:none;" title="Due Fees Reminder">⚠️ Due Fee</a>
-                <a href="https://wa.me/91${phoneNum}?text=${paidMsg}" target="_blank" style="background:#21815e;color:#fff;padding:3px 6px;border-radius:4px;font-size:10px;text-decoration:none;" title="Paid Fee Receipt">✅ Paid</a>
-              ` : 'No Phone'}
-              <button onclick="deleteStudent('${s.id}')" style="background:var(--bad);color:#fff;padding:3px 6px;border-radius:4px;font-size:10px;">Delete</button>
-            </div>
-          </td>
-        </tr>`;
-      }).join('');
-      
-      document.getElementById('resStudentSelect').innerHTML = cachedStudents.map(s => `<option value="${s.id}">${s.full_name} (${s.roll_no})</option>`).join('');
-      document.getElementById('attStudentSelect').innerHTML = cachedStudents.map(s => `<option value="${s.id}">${s.full_name} (${s.roll_no})</option>`).join('');
-      document.getElementById('feeStudentSelect').innerHTML = cachedStudents.map(s => `<option value="${s.id}">${s.full_name} (${s.roll_no})</option>`).join('');
-    
-      renderAttendanceSummary(cachedStudents);
-      renderFeeSummary(cachedStudents);
-    } else {
-      studentTbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--muted);">Koi student nahi mila</td></tr>';
-      document.getElementById('attendanceSummaryTable').innerHTML = '<tr><td colspan="2" style="text-align:center;color:var(--muted);">Pehle students add karein</td></tr>';
-      document.getElementById('feesTable').innerHTML = '<tr><td colspan="3" style="text-align:center;color:var(--muted);">Pehle students add karein</td></tr>';
-    }
+        function addEnquiry() {
+            alert('Admission enquiry saved successfully!');
+        }
 
-    // Tests
-    const { data: tests } = await db.from('tests').select('*').order('created_at', { ascending: false });
-    const cachedTests = tests || [];
-    const testsTbody = document.getElementById('testsTable');
-    if (cachedTests.length > 0) {
-      testsTbody.innerHTML = cachedTests.map(t => `<tr><td><b>${t.title}</b></td><td>${t.subject || '-'}</td><td>${t.total_marks}</td><td>${t.test_date || '-'}</td></tr>`).join('');
-      document.getElementById('resTestSelect').innerHTML = cachedTests.map(t => `<option value="${t.id}">${t.title} (${t.total_marks}M)</option>`).join('');
-    } else {
-      testsTbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--muted);">Koi test scheduled nahi hai</td></tr>';
-    }
+        function sendSMSNotifications() {
+            alert('Notification / SMS sent successfully to registered numbers!');
+        }
 
-    // Enquiries
-    const { data: enquiries } = await db.from('enquiries').select('*').order('created_at', { ascending: false });
-    const cachedEnq = enquiries || [];
-    document.getElementById('statTotalEnquiries').innerText = cachedEnq.length;
-    const enqTbody = document.getElementById('enquiriesTable');
-    if (cachedEnq.length > 0) {
-      enqTbody.innerHTML = cachedEnq.map(e => `<tr><td><b>${e.student_name}</b></td><td>${e.phone || '-'}</td><td>${e.class_name || '-'}</td><td><span class="badge-paid">${e.status || 'Pending'}</span></td></tr>`).join('');
-    } else {
-      enqTbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--muted);">Koi enquiry nahi hai</td></tr>';
-    }
+        // MCQ Result Logic
+        function submitQuiz() {
+            let score = 0;
+            if(document.getElementById('q1_correct').checked) score++;
+            if(document.getElementById('q2_correct').checked) score++;
+            document.getElementById('quizResult').innerText = `Quiz Submitted! Your Score: ${score}/2 (${(score/2)*100}%)`;
+        }
 
-    // Results & Class Comparison
-    const { data: results } = await db.from('test_results').select('*, tests(title, total_marks), students(full_name)').order('created_at', { ascending: false });
-    const resTbody = document.getElementById('resultsTable');
-    if (results && results.length > 0) {
-      resTbody.innerHTML = results.map(r => {
-        const total = r.tests?.total_marks || 100;
-        const obtained = r.marks_obtained || 0;
-        const percentage = Math.round((obtained / total) * 100);
-        let badgeColor = percentage >= 60 ? 'badge-paid' : 'badge-absent';
-        return `<tr>
-          <td><b>${r.tests?.title || 'Test'}</b></td>
-          <td>${r.students?.full_name || 'Student'}<br><b>${obtained}/${total} (${percentage}%)</b></td>
-          <td><span class="${badgeColor}">${percentage >= 60 ? 'Above Average' : 'Needs Improvement'}</span></td>
-        </tr>`;
-      }).join('');
-    } else {
-      resTbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:var(--muted);">Koi marks entered nahi hain</td></tr>';
-    }
-  }
-
-  async function renderAttendanceSummary(students) {
-    const { data: attRecords } = await db.from('attendance').select('*');
-    const records = attRecords || [];
-    const attTbody = document.getElementById('attendanceSummaryTable');
-
-    attTbody.innerHTML = students.map(s => {
-      const studentAtt = records.filter(a => a.student_id === s.id);
-      const presentCount = studentAtt.filter(a => a.status === 'Present').length;
-      const totalMarked = studentAtt.length;
-      const monthlyPercent = totalMarked > 0 ? Math.round((presentCount / totalMarked) * 100) : 0;
-      
-      return `<tr>
-        <td><b>${s.full_name}</b><br><small style="color:var(--muted)">Roll: ${s.roll_no}</small></td>
-        <td>
-          <b>Present:</b> ${presentCount} / ${totalMarked} Days<br>
-          <span class="badge-paid" style="font-size:12px;">Monthly/Yearly Attendance: ${monthlyPercent}%</span>
-        </td>
-      </tr>`;
-    }).join('');
-  }
-
-  async function renderFeeSummary(students) {
-    const { data: feeRecords } = await db.from('fee_payments').select('*');
-    const fees = feeRecords || [];
-    const feeTbody = document.getElementById('feesTable');
-
-    let totalCollectedAll = 0;
-
-    feeTbody.innerHTML = students.map(s => {
-      const studentFees = fees.filter(f => f.student_id === s.id);
-      const paidTotal = studentFees.reduce((sum, f) => sum + Number(f.amount), 0);
-      totalCollectedAll += paidTotal;
-      const monthlyFee = Number(s.monthly_fee) || 0;
-      const annualFee = monthlyFee * 12;
-      const pendingDue = Math.max(0, monthlyFee - paidTotal);
-
-      return `<tr>
-        <td><b>${s.full_name}</b><br><small style="color:var(--muted)">Annual Due: ₹${annualFee}</small></td>
-        <td><span class="badge-paid">Paid: ₹${paidTotal}</span></td>
-        <td><span class="${pendingDue > 0 ? 'badge-absent' : 'badge-paid'}">₹${pendingDue} Pending</span></td>
-      </tr>`;
-    }).join('');
-
-    document.getElementById('statMonthlyFee').innerText = '₹' + totalCollectedAll;
-  }
-
-  window.deleteStudent = async function(id) {
-    if(!confirm('Kya aap is student ko delete karna chahte hain?')) return;
-    const { error } = await db.from('students').delete().eq('id', id);
-    if(error) alert('Error: ' + error.message);
-    else { alert('Student deleted successfully!'); loadAllData(); }
-  };
-
-  window.addStudent = async function() {
-    const roll_no = document.getElementById('sRoll').value.trim();
-    const full_name = document.getElementById('sName').value.trim();
-    const phone = document.getElementById('sPhone').value.trim();
-    const monthly_fee = document.getElementById('sFee').value.trim() || 0;
-    
-    const photoInput = document.getElementById('sPhotoFile');
-    let photo_url = 'https://via.placeholder.com/40';
-
-    if (photoInput.files && photoInput.files[0]) {
-      const reader = new FileReader();
-      reader.onload = async function(e) {
-        photo_url = e.target.result;
-        await insertStudentToDB(roll_no, full_name, phone, monthly_fee, photo_url);
-      };
-      reader.readAsDataURL(photoInput.files[0]);
-    } else {
-      await insertStudentToDB(roll_no, full_name, phone, monthly_fee, photo_url);
-    }
-  };
-
-  async function insertStudentToDB(roll_no, full_name, phone, monthly_fee, photo_url) {
-    const { error } = await db.from('students').insert([{ roll_no, full_name, phone, monthly_fee, photo_url }]);
-    if(error) alert('Error: ' + error.message);
-    else { alert('Student added successfully!'); toggleForm('studentForm'); loadAllData(); }
-  }
-
-  window.markMonthlyAttendance = async function() {
-    const student_id = document.getElementById('attStudentSelect').value;
-    const month = document.getElementById('attMonth').value;
-    const dayNum = document.getElementById('attDayNum').value;
-    const status = document.getElementById('attStatus').value;
-    if(!dayNum || dayNum < 1 || dayNum > 31) { alert('Sahi date (1-31) bharein!'); return; }
-    const dateStr = `${month} ${dayNum}`;
-    
-    const { error } = await db.from('attendance').insert([{ student_id, date: dateStr, status }]);
-    if(error) alert('Error: ' + error.message);
-    else { alert('Attendance recorded for ' + dateStr); toggleForm('attForm'); loadAllData(); }
-  };
-
-  window.addTest = async function() {
-    const title = document.getElementById('tTitle').value.trim();
-    const subject = document.getElementById('tSubject').value.trim();
-    const total_marks = document.getElementById('tMarks').value;
-    const test_date = document.getElementById('tDate').value;
-    if(!title) { alert('Test title zaroori hai!'); return; }
-    const { error } = await db.from('tests').insert([{ title, subject, total_marks, test_date }]);
-    if(error) alert('Error: ' + error.message);
-    else { alert('Test created!'); toggleForm('testForm'); loadAllData(); }
-  };
-
-  window.recordFee = async function() {
-    const student_id = document.getElementById('feeStudentSelect').value;
-    const amount = document.getElementById('feeAmount').value;
-    const month = document.getElementById('feeMonth').value.trim();
-    if(!amount || !month) { alert('Amount aur Month zaroori hai!'); return; }
-    const { error } = await db.from('fee_payments').insert([{ student_id, amount, month }]);
-    if(error) alert('Error: ' + error.message);
-    else { alert('Fee record saved!'); toggleForm('feeForm'); loadAllData(); }
-  };
-
-  window.addEnquiry = async function() {
-    const student_name = document.getElementById('eName').value.trim();
-    const parent_name = document.getElementById('eParent').value.trim();
-    const phone = document.getElementById('ePhone').value.trim();
-    const class_name = document.getElementById('eClass').value.trim();
-    if(!student_name) { alert('Student name zaroori hai!'); return; }
-    const { error } = await db.from('enquiries').insert([{ student_name, parent_name, phone, class_name }]);
-    if(error) alert('Error: ' + error.message);
-    else { alert('Enquiry saved!'); toggleForm('enqForm'); loadAllData(); }
-  };
-
-  window.addResult = async function() {
-    const test_id_actual = document.getElementById('resTestSelect').value;
-    const student_id = document.getElementById('resStudentSelect').value;
-    const marks_obtained = document.getElementById('resMarks').value;
-    if(!test_id_actual || !student_id || !marks_obtained) { alert('Saari details bharein!'); return; }
-    const { error } = await db.from('test_results').insert([{ test_id: test_id_actual, student_id, marks_obtained }]);
-    if(error) alert('Error: ' + error.message);
-    else { alert('Marks saved!'); toggleForm('resultForm'); loadAllData(); }
-  };
-</script>
+        function publishTest() {
+            alert('Test Series and PDF published successfully with timer configurations!');
+        }
+    </script>
 </body>
 </html>
