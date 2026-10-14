@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NK Education Centre - Student Management Portal</title>
-    <!-- Chart.js for Performance & Comparison Graphs -->
+    <title>NK Education Centre - Portal</title>
+    <!-- Chart.js for Performance Graphs -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
@@ -26,7 +26,7 @@
         /* Sidebar Navigation - Exact Coaching Green */
         sidebar { width: 270px; background: #0e3d30; color: white; display: flex; flex-direction: column; height: 100%; box-shadow: 2px 0 5px rgba(0,0,0,0.1); }
         
-        /* Admin Header with Profile Photo & Clear Logout Button */
+        /* Header with Profile Photo & Logout Button */
         .sidebar-header { padding: 15px 20px; background: #08261e; display: flex; flex-direction: column; gap: 12px; border-bottom: 1px solid #145a44; }
         .sidebar-top-row { display: flex; align-items: center; justify-content: space-between; width: 100%; }
         .admin-profile-box { display: flex; align-items: center; gap: 10px; }
@@ -67,7 +67,7 @@
 </head>
 <body>
 
-    <!-- Login Portal (Admin & Student Switch) -->
+    <!-- Login Portal -->
     <div id="login-overlay">
         <div class="login-card">
             <h3>NK Education Portal</h3>
@@ -92,13 +92,13 @@
         </div>
     </div>
 
-    <!-- Serial Wise Sidebar Menu with Admin Profile & Logout Button -->
+    <!-- Sidebar Menu -->
     <sidebar id="portalSidebar" style="display: none;">
         <div class="sidebar-header">
             <div class="sidebar-top-row">
                 <div class="admin-profile-box">
-                    <div class="admin-avatar-container" title="Click to change admin photo">
-                        <img id="adminProfileImg" src="https://via.placeholder.com/40" alt="Admin" class="admin-avatar">
+                    <div class="admin-avatar-container" title="Click to change photo">
+                        <img id="adminProfileImg" src="https://via.placeholder.com/40" alt="Avatar" class="admin-avatar">
                         <input type="file" id="adminPhotoInput" class="admin-avatar-input" accept="image/*" onchange="updateAdminPhoto(event)">
                     </div>
                     <div class="admin-info">
@@ -110,27 +110,18 @@
             <button class="logout-btn" onclick="logoutPortal()">🚪 Logout Portal</button>
         </div>
         <ul class="sidebar-menu" id="sidebarMenuList">
-            <li><a href="#" onclick="showSection('dashboard', this)" class="active">1. Dashboard</a></li>
-            <li><a href="#" onclick="showSection('student-directory', this)">2. Student Directory</a></li>
-            <li><a href="#" onclick="showSection('enquiries', this)">3. Admission Enquiries</a></li>
-            <li><a href="#" onclick="showSection('fees-dues', this)">4. Fees & Dues Management</a></li>
-            <li><a href="#" onclick="showSection('attendance', this)">5. Attendance Tracker</a></li>
-            <li id="menuPerformance"><a href="#" onclick="showSection('performance', this)">6. Performance & Comparison</a></li>
-            <li><a href="#" onclick="showSection('sms-center', this)">7. SMS & Notification Center</a></li>
-            <li><a href="#" onclick="showSection('test-series', this)">8. Test Series & PDF Hub</a></li>
-            <li><a href="#" onclick="showSection('mcq-quiz', this)">9. MCQ Quiz Portal</a></li>
-            <li id="menuSettings"><a href="#" onclick="showSection('admin-settings', this)">10. Admin Settings</a></li>
+            <!-- Dynamically populated based on role -->
         </ul>
     </sidebar>
 
     <!-- Main Content Panels -->
     <div class="main-content" id="portalMainContent">
 
-        <!-- 1. Dashboard -->
+        <!-- 1. Dashboard / Student Profile -->
         <div id="dashboard" class="section-box active">
-            <h2>Welcome Back!</h2>
-            <p style="color: #666; margin-bottom: 20px;">Yahan se aap apne coaching ka saara data aur fee track kar sakte hain.</p>
-            <div class="summary-grid">
+            <h2 id="dashHeading">Welcome Back!</h2>
+            <p style="color: #666; margin-bottom: 20px;" id="dashSubtext">Yahan se aap apne coaching ka saara data aur fee track kar sakte hain.</p>
+            <div class="summary-grid" id="dashStatsGrid">
                 <div class="stat-card"><h4>Total Students</h4><p id="dashTotalStudents">4</p></div>
                 <div class="stat-card"><h4>Monthly Fee Collected</h4><p id="dashTotalDues">₹0</p></div>
                 <div class="stat-card"><h4>Today Present</h4><p id="dashPresentCount">4</p></div>
@@ -138,8 +129,8 @@
             </div>
         </div>
 
-        <!-- 2. Student Directory -->
-        <div id="student-directory" class="section-box">
+        <!-- 2. Student Directory (Admin Only) -->
+        <div id="student-directory" class="section-box admin-only">
             <h2>Students Directory</h2>
             <div class="form-group"><label>Student Name</label><input type="text" id="sName" placeholder="Enter full name"></div>
             <div class="form-group"><label>Class</label><input type="text" id="sClass" placeholder="e.g. 10th / 12th"></div>
@@ -151,21 +142,18 @@
             <div class="form-group"><label>Student Photo</label><input type="file" id="sPhoto" accept="image/*"></div>
             <button onclick="addStudent()">+ Add Student</button>
             <table id="studentTable">
-                <tr><th>Photo</th><th>Roll & Name</th><th>Phone</th><th>WhatsApp / SMS Actions</th></tr>
-                <tr><td><img src="https://via.placeholder.com/40" style="border-radius:50%"></td><td><b>105</b><br>Shreya prajapati</td><td>-</td><td>No Phone <button style="background:#c0392b; padding:4px 8px; font-size:0.8rem; color:#fff; border:none; border-radius:4px;">Delete</button></td></tr>
+                <tr><th>Photo</th><th>Roll & Name</th><th>Phone</th><th>Actions</th></tr>
+                <tr><td><img src="https://via.placeholder.com/40" style="border-radius:50%"></td><td><b>105</b><br>Shreya prajapati</td><td>-</td><td>No Phone</td></tr>
             </table>
         </div>
 
-        <!-- 3. Admission Enquiries -->
-        <div id="enquiries" class="section-box">
+        <!-- 3. Admission Enquiries (Admin Only) -->
+        <div id="enquiries" class="section-box admin-only">
             <h2>Admission Enquiries</h2>
             <div class="form-group"><label>Candidate Name</label><input type="text" id="eName" placeholder="Candidate Name"></div>
             <div class="form-group"><label>Phone Number</label><input type="text" id="ePhone" placeholder="Mobile Number"></div>
             <div class="form-group"><label>Address</label><input type="text" id="eAddress" placeholder="Address"></div>
-            <div class="form-group">
-                <label>Board</label>
-                <select id="eBoard"><option value="MP Board">MP Board</option><option value="CBSE">CBSE</option></select>
-            </div>
+            <div class="form-group"><label>Board</label><select id="eBoard"><option value="MP Board">MP Board</option><option value="CBSE">CBSE</option></select></div>
             <button onclick="addEnquiry()">Save Enquiry</button>
             <table id="enquiryTable">
                 <tr><th>Name</th><th>Phone</th><th>Address</th><th>Board</th><th>Status</th></tr>
@@ -177,15 +165,7 @@
         <div id="fees-dues" class="section-box">
             <h2>Fees & Dues Management</h2>
             <div class="summary-grid">
-                <div class="stat-card"><h4>Total Coaching Monthly Pending</h4><p id="totalMonthlyPending">₹12,500</p></div>
-            </div>
-            <div class="form-group">
-                <label>Filter By Class</label>
-                <select id="filterClassFees" onchange="renderFeesTable()">
-                    <option value="all">All Classes</option>
-                    <option value="10th">Class 10th</option>
-                    <option value="12th">Class 12th</option>
-                </select>
+                <div class="stat-card"><h4>Total Monthly Pending / Due</h4><p id="totalMonthlyPending">₹1,500</p></div>
             </div>
             <table id="feesTable">
                 <tr><th>Student Name</th><th>Class</th><th>Installment Start</th><th>Installment End</th><th>Status</th><th>Due Amount</th></tr>
@@ -193,17 +173,14 @@
             </table>
         </div>
 
-        <!-- 5. Attendance Tracker -->
-        <div id="attendance" class="section-box">
+        <!-- 5. Attendance Tracker (Admin Only) -->
+        <div id="attendance" class="section-box admin-only">
             <h2>Attendance Tracker</h2>
             <div class="summary-grid">
                 <div class="stat-card" style="border-left-color: #2ecc71;"><h4>Total Present Today</h4><p id="countPresent">0</p></div>
                 <div class="stat-card" style="border-left-color: #e74c3c;"><h4>Total Absent Today</h4><p id="countAbsent">0</p></div>
             </div>
-            <div class="form-group">
-                <label>Attendance Date (Auto Today)</label>
-                <input type="date" id="attendanceDate">
-            </div>
+            <div class="form-group"><label>Attendance Date</label><input type="date" id="attendanceDate"></div>
             <div class="form-group">
                 <label>Select Class to Load Students List</label>
                 <select id="attendanceClassSelect" onchange="loadClassStudentsForAttendance()">
@@ -213,15 +190,14 @@
                 </select>
             </div>
             <table id="attendanceListTable">
-                <tr><th>Roll No</th><th>Student Name</th><th>Class</th><th>Mark Attendance (Present / Absent)</th></tr>
+                <tr><th>Roll No</th><th>Student Name</th><th>Class</th><th>Mark Attendance</th></tr>
             </table>
-            <br>
-            <button onclick="saveAttendance()">Save Attendance</button>
+            <br><button onclick="saveAttendance()">Save Attendance</button>
         </div>
 
-        <!-- 6. Student Performance & Comparison (Hidden for Students) -->
+        <!-- 6. Student Performance -->
         <div id="performance" class="section-box">
-            <h2>Student Performance & Class Comparison</h2>
+            <h2>Student Performance & Comparison</h2>
             <div class="form-group">
                 <label>Select Class Comparison</label>
                 <select id="selectClassPerformance" onchange="renderClassComparisonChart()">
@@ -231,12 +207,12 @@
             </div>
             <div style="width: 70%; margin: auto;"><canvas id="classComparisonChart"></canvas></div>
             <hr style="margin: 20px 0;">
-            <h3>Individual Student Performance (Percentage & Graphs)</h3>
+            <h3>Individual Student Performance</h3>
             <div style="width: 70%; margin: auto; margin-top: 15px;"><canvas id="individualChart"></canvas></div>
         </div>
 
-        <!-- 7. SMS & Notification Center -->
-        <div id="sms-center" class="section-box">
+        <!-- 7. SMS & Notification Center (Admin Only) -->
+        <div id="sms-center" class="section-box admin-only">
             <h2>SMS & Notification Center</h2>
             <div class="form-group">
                 <label>Select Message Template</label>
@@ -244,9 +220,6 @@
                     <option value="welcome">Welcome Message</option>
                     <option value="fees_due">Fees Due Reminder</option>
                     <option value="fees_paid">Fees Paid Receipt</option>
-                    <option value="test_series">New Test Series Added Notification</option>
-                    <option value="pyq">PYQ Materials Notification</option>
-                    <option value="sample_paper">Sample Papers Alert</option>
                 </select>
             </div>
             <button onclick="sendSMSNotifications()">Send Bulk SMS / Notification</button>
@@ -254,16 +227,18 @@
 
         <!-- 8. Test Series & PDF Hub -->
         <div id="test-series" class="section-box">
-            <h2>Test Series</h2>
-            <div class="form-group"><label>Test Title / Name</label><input type="text" id="testTitle" placeholder="e.g. Physics Mock Test 1"></div>
-            <div class="form-group"><label>Upload Question PDF / Sample Paper</label><input type="file" id="testPdfFile" accept=".pdf"></div>
-            <div class="form-group"><label>Test Duration (in Minutes)</label><input type="number" id="testDuration" value="30"></div>
-            <button onclick="publishTest()">+ Create Test</button>
-            <hr style="margin: 20px 0;">
-            <h3>Available Tests</h3>
+            <h2>Test Series & Practice Hub</h2>
+            <div id="adminTestCreationBox" class="form-group admin-only" style="background:#f1f9f6; padding:15px; border-radius:8px; margin-bottom:20px;">
+                <h3>Create New Test (Admin Only)</h3>
+                <input type="text" id="testTitle" placeholder="Test Title e.g. Physics Mock Test 1" style="margin-top:8px;">
+                <input type="file" id="testPdfFile" accept=".pdf" style="margin-top:8px;">
+                <input type="number" id="testDuration" value="30" placeholder="Duration in Mins" style="margin-top:8px;">
+                <button onclick="publishTest()" style="margin-top:10px;">+ Publish Test</button>
+            </div>
+            <h3>Available Tests for Students</h3>
             <table id="testTable">
-                <tr><th>Title</th><th>Subject</th><th>Marks</th><th>Date</th></tr>
-                <tr><td colspan="4" style="text-align:center; color:#7f8c8d;">Koi test scheduled nahi hai</td></tr>
+                <tr><th>Test Title</th><th>Duration</th><th>Action</th></tr>
+                <tr><td>Physics Chapter 1 Mock Test</td><td>30 Mins</td><td><button onclick="alert('Starting Test...')">Start Attempt</button></td></tr>
             </table>
         </div>
 
@@ -285,21 +260,12 @@
             <div id="quizResult" style="margin-top: 20px; font-weight: bold; font-size: 1.2rem;"></div>
         </div>
 
-        <!-- 10. Admin Settings (Change Password) -->
-        <div id="admin-settings" class="section-box">
+        <!-- 10. Admin Settings (Admin Only) -->
+        <div id="admin-settings" class="section-box admin-only">
             <h2>Admin Settings & Security</h2>
-            <div class="form-group">
-                <label>Current Password</label>
-                <input type="password" id="currentPass" placeholder="Enter current password">
-            </div>
-            <div class="form-group">
-                <label>New Password</label>
-                <input type="password" id="newPass" placeholder="Enter new password">
-            </div>
-            <div class="form-group">
-                <label>Confirm New Password</label>
-                <input type="password" id="confirmPass" placeholder="Confirm new password">
-            </div>
+            <div class="form-group"><label>Current Password</label><input type="password" id="currentPass" placeholder="Enter current password"></div>
+            <div class="form-group"><label>New Password</label><input type="password" id="newPass" placeholder="Enter new password"></div>
+            <div class="form-group"><label>Confirm New Password</label><input type="password" id="confirmPass" placeholder="Confirm new password"></div>
             <button onclick="changeAdminPassword()">Update Password</button>
             <p id="passwordMsg" style="margin-top: 15px; font-weight: bold;"></p>
         </div>
@@ -307,19 +273,28 @@
     </div>
 
     <script>
-        // Admin Photo Update Handler
-        function updateAdminPhoto(event) {
-            let file = event.target.files[0];
-            if (file) {
-                let reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('adminProfileImg').src = e.target.result;
-                }
-                reader.readAsDataURL(file);
-            }
-        }
+        // Role-based Sidebar Menus
+        const adminMenuHTML = `
+            <li><a href="#" onclick="showSection('dashboard', this)" class="active">1. Dashboard</a></li>
+            <li><a href="#" onclick="showSection('student-directory', this)">2. Student Directory</a></li>
+            <li><a href="#" onclick="showSection('enquiries', this)">3. Admission Enquiries</a></li>
+            <li><a href="#" onclick="showSection('fees-dues', this)">4. Fees & Dues Management</a></li>
+            <li><a href="#" onclick="showSection('attendance', this)">5. Attendance Tracker</a></li>
+            <li><a href="#" onclick="showSection('performance', this)">6. Performance & Comparison</a></li>
+            <li><a href="#" onclick="showSection('sms-center', this)">7. SMS & Notification Center</a></li>
+            <li><a href="#" onclick="showSection('test-series', this)">8. Test Series & PDF Hub</a></li>
+            <li><a href="#" onclick="showSection('mcq-quiz', this)">9. MCQ Quiz Portal</a></li>
+            <li><a href="#" onclick="showSection('admin-settings', this)">10. Admin Settings</a></li>
+        `;
 
-        // Switch between Admin and Student Login Tabs
+        const studentMenuHTML = `
+            <li><a href="#" onclick="showSection('dashboard', this)" class="active">1. My Profile & Dashboard</a></li>
+            <li><a href="#" onclick="showSection('fees-dues', this)">2. My Fees Status</a></li>
+            <li><a href="#" onclick="showSection('test-series', this)">3. Test Series Hub</a></li>
+            <li><a href="#" onclick="showSection('mcq-quiz', this)">4. MCQ Quiz Portal</a></li>
+            <li><a href="#" onclick="showSection('performance', this)">5. My Performance</a></li>
+        `;
+
         function switchLoginTab(role) {
             document.querySelectorAll('.login-tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.login-form').forEach(f => f.classList.remove('active'));
@@ -332,7 +307,7 @@
             }
         }
 
-        // Admin Password Verification
+        // Admin Login
         function checkAdminPassword() {
             let pass = document.getElementById('adminPasswordInput').value.trim();
             let savedPass = localStorage.getItem('admin_portal_pass') || 'admin123';
@@ -343,16 +318,15 @@
                 document.getElementById('portalMainContent').style.display = 'block';
                 document.getElementById('sidebarRoleTitle').innerText = 'NK Education';
                 document.getElementById('sidebarRoleSubtitle').innerText = 'Admin Portal';
+                document.getElementById('sidebarMenuList').innerHTML = adminMenuHTML;
                 
-                // Show performance & settings for admin
-                document.getElementById('menuPerformance').style.display = 'block';
-                document.getElementById('menuSettings').style.display = 'block';
+                document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'block');
             } else {
                 document.getElementById('loginError').style.display = 'block';
             }
         }
 
-        // Student Login Verification (Hides Performance & Settings)
+        // Student Login
         function checkStudentLogin() {
             let val = document.getElementById('studentRollInput').value.trim();
             if(val !== '') {
@@ -361,18 +335,26 @@
                 document.getElementById('portalMainContent').style.display = 'block';
                 document.getElementById('sidebarRoleTitle').innerText = 'Student Portal';
                 document.getElementById('sidebarRoleSubtitle').innerText = 'Roll: ' + val;
+                document.getElementById('sidebarMenuList').innerHTML = studentMenuHTML;
                 
-                // Hide Performance and Admin Settings for Students
-                document.getElementById('menuPerformance').style.display = 'none';
-                document.getElementById('menuSettings').style.display = 'none';
-                
+                // Customize Dashboard for Student
+                document.getElementById('dashHeading').innerText = 'Welcome, Student!';
+                document.getElementById('dashSubtext').innerText = 'Here is your personal academic overview and fee status.';
+                document.getElementById('dashStatsGrid').innerHTML = `
+                    <div class="stat-card"><h4>My Attendance</h4><p>92%</p></div>
+                    <div class="stat-card"><h4>Pending Fees</h4><p>₹0</p></div>
+                    <div class="stat-card"><h4>Tests Attempted</h4><p>3</p></div>
+                `;
+
+                // Hide admin-only elements
+                document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
                 alert('Welcome Student! Logged in successfully.');
             } else {
                 document.getElementById('studentLoginError').style.display = 'block';
             }
         }
 
-        // Logout Functionality
+        // Logout
         function logoutPortal() {
             document.getElementById('login-overlay').style.display = 'flex';
             document.getElementById('portalSidebar').style.display = 'none';
@@ -381,167 +363,14 @@
             document.getElementById('studentRollInput').value = '';
         }
 
-        // Change Admin Password Functionality
-        function changeAdminPassword() {
-            let current = document.getElementById('currentPass').value.trim();
-            let newP = document.getElementById('newPass').value.trim();
-            let confirmP = document.getElementById('confirmPass').value.trim();
-            let msg = document.getElementById('passwordMsg');
-            let savedPass = localStorage.getItem('admin_portal_pass') || 'admin123';
-
-            if(current !== savedPass) {
-                msg.style.color = 'red';
-                msg.innerText = 'Current password is incorrect!';
-                return;
-            }
-            if(newP === '' || newP !== confirmP) {
-                msg.style.color = 'red';
-                msg.innerText = 'New passwords do not match or empty!';
-                return;
-            }
-
-            localStorage.setItem('admin_portal_pass', newP);
-            msg.style.color = 'green';
-            msg.innerText = 'Password successfully updated!';
-            document.getElementById('currentPass').value = '';
-            document.getElementById('newPass').value = '';
-            document.getElementById('confirmPass').value = '';
-        }
-
-        // Navigation Handler
-        function showSection(sectionId, element) {
-            document.querySelectorAll('.section-box').forEach(box => box.classList.remove('active'));
-            document.querySelectorAll('.sidebar-menu a').forEach(a => a.classList.remove('active'));
-            document.getElementById(sectionId).classList.add('active');
-            element.classList.add('active');
-        }
-
-        // Set Auto Current Date on Load for Attendance
-        window.onload = function() {
-            let today = new Date().toISOString().split('T')[0];
-            let attDateElem = document.getElementById('attendanceDate');
-            if(attDateElem) attDateElem.value = today;
-
-            // Initialize Charts with Coaching Green Theme
-            const ctx1 = document.getElementById('classComparisonChart').getContext('2d');
-            new Chart(ctx1, {
-                type: 'bar',
-                data: {
-                    labels: ['Physics', 'Chemistry', 'Maths', 'English'],
-                    datasets: [{ label: 'Class Average Score (%)', data: [75, 82, 68, 90], backgroundColor: '#0e3d30' }]
-                }
-            });
-
-            const ctx2 = document.getElementById('individualChart').getContext('2d');
-            new Chart(ctx2, {
-                type: 'line',
-                data: {
-                    labels: ['Test 1', 'Test 2', 'Test 3', 'Test 4'],
-                    datasets: [{ label: 'Student Performance Trend (%)', data: [65, 70, 85, 92], borderColor: '#0e3d30', fill: false }]
-                }
-            });
-        };
-
-        // Students Array for Attendance & Directory Demo
-        let studentsList = [
-            { roll: 101, name: 'Rahul Sharma', sClass: '10th', board: 'MP Board', address: 'Satna', photo: 'https://via.placeholder.com/40' },
-            { roll: 102, name: 'Amit Kumar', sClass: '12th', board: 'CBSE', address: 'Rewa', photo: 'https://via.placeholder.com/40' },
-            { roll: 103, name: 'Priya Singh', sClass: '10th', board: 'MP Board', address: 'Satna', photo: 'https://via.placeholder.com/40' }
-        ];
-
-        let rollCounter = 104;
-        function addStudent() {
-            let name = document.getElementById('sName').value;
-            let sClass = document.getElementById('sClass').value;
-            let address = document.getElementById('sAddress').value;
-            let board = document.getElementById('sBoard').value;
-            let photoInput = document.getElementById('sPhoto');
-
-            if(!name || !sClass) {
-                alert('Please enter Student Name and Class!');
-                return;
-            }
-
-            let photoSrc = 'https://via.placeholder.com/40';
-            if (photoInput.files && photoInput.files[0]) {
+        // Admin Photo Update
+        function updateAdminPhoto(event) {
+            let file = event.target.files[0];
+            if (file) {
                 let reader = new FileReader();
-                reader.onload = function(e) {
-                    photoSrc = e.target.result;
-                    saveNewStudentRecord(rollCounter++, name, sClass, board, address, photoSrc);
-                }
-                reader.readAsDataURL(photoInput.files[0]);
-            } else {
-                saveNewStudentRecord(rollCounter++, name, sClass, board, address, photoSrc);
+                reader.onload = function(e) { document.getElementById('adminProfileImg').src = e.target.result; }
+                reader.readAsDataURL(file);
             }
         }
 
-        function saveNewStudentRecord(roll, name, sClass, board, address, photo) {
-            studentsList.push({ roll, name, sClass, board, address, photo });
-            let table = document.getElementById('studentTable');
-            let row = table.insertRow();
-            row.innerHTML = `
-                <td><img src="${photo}" alt="Student" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;"></td>
-                <td><b>${roll}</b><br>${name}</td>
-                <td>-</td>
-                <td>No Phone <button style="background:#c0392b; padding:4px 8px; font-size:0.8rem; color:#fff; border:none; border-radius:4px;">Delete</button></td>
-            `;
-            alert('Student added successfully!');
-        }
-
-        // Load Class Students List for Attendance
-        function loadClassStudentsForAttendance() {
-            let selectedClass = document.getElementById('attendanceClassSelect').value;
-            let table = document.getElementById('attendanceListTable');
-            table.innerHTML = `<tr><th>Roll No</th><th>Student Name</th><th>Class</th><th>Mark Attendance (Present / Absent)</th></tr>`;
-            
-            let filteredStudents = studentsList.filter(s => s.sClass.toLowerCase() === selectedClass.toLowerCase());
-            
-            if(filteredStudents.length === 0) {
-                let row = table.insertRow();
-                row.innerHTML = `<td colspan="4" style="text-align:center; color: #7f8c8d;">No students found in this class.</td>`;
-                return;
-            }
-
-            filteredStudents.forEach(student => {
-                let row = table.insertRow();
-                row.innerHTML = `
-                    <td>${student.roll}</td>
-                    <td>${student.name}</td>
-                    <td>${student.sClass}</td>
-                    <td>
-                        <label style="display:inline; margin-right:15px;"><input type="radio" name="att_${student.roll}" value="Present" checked> Present</label>
-                        <label style="display:inline;"><input type="radio" name="att_${student.roll}" value="Absent"> Absent</label>
-                    </td>
-                `;
-            });
-        }
-
-        function saveAttendance() {
-            let date = document.getElementById('attendanceDate').value;
-            alert(`Attendance successfully saved for date: ${date}!`);
-            document.getElementById('countPresent').innerText = studentsList.length;
-            document.getElementById('countAbsent').innerText = 0;
-        }
-
-        function addEnquiry() {
-            alert('Admission enquiry saved successfully!');
-        }
-
-        function sendSMSNotifications() {
-            alert('Notification / SMS sent successfully to registered numbers!');
-        }
-
-        // MCQ Result Logic
-        function submitQuiz() {
-            let score = 0;
-            if(document.getElementById('q1_correct').checked) score++;
-            if(document.getElementById('q2_correct').checked) score++;
-            document.getElementById('quizResult').innerText = `Quiz Submitted! Your Score: ${score}/2 (${(score/2)*100}%)`;
-        }
-
-        function publishTest() {
-            alert('Test Series and PDF published successfully with timer configurations!');
-        }
-    </script>
-</body>
-</html>
+        // Change
