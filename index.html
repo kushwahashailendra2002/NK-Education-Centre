@@ -110,7 +110,7 @@
             <button class="logout-btn" onclick="logoutPortal()">🚪 Logout Portal</button>
         </div>
         <ul class="sidebar-menu" id="sidebarMenuList">
-            <!-- Dynamically populated based on role -->
+            <!-- Populated dynamically -->
         </ul>
     </sidebar>
 
@@ -129,7 +129,7 @@
             </div>
         </div>
 
-        <!-- 2. Student Directory (Admin Only) -->
+        <!-- 2. Student Directory -->
         <div id="student-directory" class="section-box admin-only">
             <h2>Students Directory</h2>
             <div class="form-group"><label>Student Name</label><input type="text" id="sName" placeholder="Enter full name"></div>
@@ -147,7 +147,7 @@
             </table>
         </div>
 
-        <!-- 3. Admission Enquiries (Admin Only) -->
+        <!-- 3. Admission Enquiries -->
         <div id="enquiries" class="section-box admin-only">
             <h2>Admission Enquiries</h2>
             <div class="form-group"><label>Candidate Name</label><input type="text" id="eName" placeholder="Candidate Name"></div>
@@ -161,11 +161,11 @@
             </table>
         </div>
 
-        <!-- 4. Fees & Pending Management -->
+        <!-- 4. Fees Management -->
         <div id="fees-dues" class="section-box">
             <h2>Fees & Dues Management</h2>
             <div class="summary-grid">
-                <div class="stat-card"><h4>Total Monthly Pending / Due</h4><p id="totalMonthlyPending">₹1,500</p></div>
+                <div class="stat-card"><h4>Pending / Due Amount</h4><p id="totalMonthlyPending">₹1,500</p></div>
             </div>
             <table id="feesTable">
                 <tr><th>Student Name</th><th>Class</th><th>Installment Start</th><th>Installment End</th><th>Status</th><th>Due Amount</th></tr>
@@ -173,7 +173,7 @@
             </table>
         </div>
 
-        <!-- 5. Attendance Tracker (Admin Only) -->
+        <!-- 5. Attendance Tracker -->
         <div id="attendance" class="section-box admin-only">
             <h2>Attendance Tracker</h2>
             <div class="summary-grid">
@@ -195,11 +195,11 @@
             <br><button onclick="saveAttendance()">Save Attendance</button>
         </div>
 
-        <!-- 6. Student Performance -->
+        <!-- 6. Student Performance & Comparison -->
         <div id="performance" class="section-box">
             <h2>Student Performance & Comparison</h2>
             <div class="form-group">
-                <label>Select Class Comparison</label>
+                <label>Select Class / Student Comparison</label>
                 <select id="selectClassPerformance" onchange="renderClassComparisonChart()">
                     <option value="10th">Class 10th Average Score</option>
                     <option value="12th">Class 12th Average Score</option>
@@ -207,11 +207,11 @@
             </div>
             <div style="width: 70%; margin: auto;"><canvas id="classComparisonChart"></canvas></div>
             <hr style="margin: 20px 0;">
-            <h3>Individual Student Performance</h3>
+            <h3>Individual Student Comparison & Graphs</h3>
             <div style="width: 70%; margin: auto; margin-top: 15px;"><canvas id="individualChart"></canvas></div>
         </div>
 
-        <!-- 7. SMS & Notification Center (Admin Only) -->
+        <!-- 7. SMS & Notification Center -->
         <div id="sms-center" class="section-box admin-only">
             <h2>SMS & Notification Center</h2>
             <div class="form-group">
@@ -260,7 +260,7 @@
             <div id="quizResult" style="margin-top: 20px; font-weight: bold; font-size: 1.2rem;"></div>
         </div>
 
-        <!-- 10. Admin Settings (Admin Only) -->
+        <!-- 10. Admin Settings -->
         <div id="admin-settings" class="section-box admin-only">
             <h2>Admin Settings & Security</h2>
             <div class="form-group"><label>Current Password</label><input type="password" id="currentPass" placeholder="Enter current password"></div>
@@ -273,14 +273,13 @@
     </div>
 
     <script>
-        // Role-based Sidebar Menus
         const adminMenuHTML = `
             <li><a href="#" onclick="showSection('dashboard', this)" class="active">1. Dashboard</a></li>
             <li><a href="#" onclick="showSection('student-directory', this)">2. Student Directory</a></li>
             <li><a href="#" onclick="showSection('enquiries', this)">3. Admission Enquiries</a></li>
             <li><a href="#" onclick="showSection('fees-dues', this)">4. Fees & Dues Management</a></li>
             <li><a href="#" onclick="showSection('attendance', this)">5. Attendance Tracker</a></li>
-            <li><a href="#" onclick="showSection('performance', this)">6. Performance & Comparison</a></li>
+            <li><a href="#" onclick="showSection('performance', this)">6. Student Comparison & Performance</a></li>
             <li><a href="#" onclick="showSection('sms-center', this)">7. SMS & Notification Center</a></li>
             <li><a href="#" onclick="showSection('test-series', this)">8. Test Series & PDF Hub</a></li>
             <li><a href="#" onclick="showSection('mcq-quiz', this)">9. MCQ Quiz Portal</a></li>
@@ -292,7 +291,7 @@
             <li><a href="#" onclick="showSection('fees-dues', this)">2. My Fees Status</a></li>
             <li><a href="#" onclick="showSection('test-series', this)">3. Test Series Hub</a></li>
             <li><a href="#" onclick="showSection('mcq-quiz', this)">4. MCQ Quiz Portal</a></li>
-            <li><a href="#" onclick="showSection('performance', this)">5. My Performance</a></li>
+            <li><a href="#" onclick="showSection('performance', this)">5. Student Comparison</a></li>
         `;
 
         function switchLoginTab(role) {
@@ -321,6 +320,7 @@
                 document.getElementById('sidebarMenuList').innerHTML = adminMenuHTML;
                 
                 document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'block');
+                showSection('dashboard', document.querySelector('.sidebar-menu a'));
             } else {
                 document.getElementById('loginError').style.display = 'block';
             }
@@ -338,7 +338,7 @@
                 document.getElementById('sidebarMenuList').innerHTML = studentMenuHTML;
                 
                 // Customize Dashboard for Student
-                document.getElementById('dashHeading').innerText = 'Welcome, Student!';
+                document.getElementById('dashHeading').innerText = 'Welcome, Student (' + val + ')!';
                 document.getElementById('dashSubtext').innerText = 'Here is your personal academic overview and fee status.';
                 document.getElementById('dashStatsGrid').innerHTML = `
                     <div class="stat-card"><h4>My Attendance</h4><p>92%</p></div>
@@ -346,8 +346,9 @@
                     <div class="stat-card"><h4>Tests Attempted</h4><p>3</p></div>
                 `;
 
-                // Hide admin-only elements
+                // Hide admin-only elements completely
                 document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
+                showSection('dashboard', document.querySelector('.sidebar-menu a'));
                 alert('Welcome Student! Logged in successfully.');
             } else {
                 document.getElementById('studentLoginError').style.display = 'block';
@@ -373,4 +374,52 @@
             }
         }
 
-        // Change
+        // Change Password
+        function changeAdminPassword() {
+            let current = document.getElementById('currentPass').value.trim();
+            let newP = document.getElementById('newPass').value.trim();
+            let confirmP = document.getElementById('confirmPass').value.trim();
+            let msg = document.getElementById('passwordMsg');
+            let savedPass = localStorage.getItem('admin_portal_pass') || 'admin123';
+
+            if(current !== savedPass) {
+                msg.style.color = 'red';
+                msg.innerText = 'Current password is incorrect!';
+                return;
+            }
+            if(newP === '' || newP !== confirmP) {
+                msg.style.color = 'red';
+                msg.innerText = 'New passwords do not match or empty!';
+                return;
+            }
+            localStorage.setItem('admin_portal_pass', newP);
+            msg.style.color = 'green';
+            msg.innerText = 'Password successfully updated!';
+            document.getElementById('currentPass').value = '';
+            document.getElementById('newPass').value = '';
+            document.getElementById('confirmPass').value = '';
+        }
+
+        // Navigation Handler
+        function showSection(sectionId, element) {
+            document.querySelectorAll('.section-box').forEach(box => box.classList.remove('active'));
+            document.querySelectorAll('.sidebar-menu a').forEach(a => a.classList.remove('active'));
+            
+            let targetBox = document.getElementById(sectionId);
+            if(targetBox) targetBox.classList.add('active');
+            if(element) element.classList.add('active');
+        }
+
+        window.onload = function() {
+            let today = new Date().toISOString().split('T')[0];
+            if(document.getElementById('attendanceDate')) document.getElementById('attendanceDate').value = today;
+
+            // Charts
+            const ctx1 = document.getElementById('classComparisonChart').getContext('2d');
+            new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: ['Physics', 'Chemistry', 'Maths', 'English'],
+                    datasets: [{ label: 'Class Average Comparison (%)', data: [75, 82, 68, 90], backgroundColor: '#0e3d30' }]
+                }
+            
