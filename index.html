@@ -73,21 +73,21 @@
         <div class="login-card">
             <h3>NK Education Portal</h3>
             <div class="login-tabs">
-                <div class="login-tab active" id="tabAdmin">Admin Login</div>
-                <div class="login-tab" id="tabStudent">Student Login</div>
+                <div class="login-tab active" id="tabAdmin" onclick="switchLoginTab('admin')">Admin Login</div>
+                <div class="login-tab" id="tabStudent" onclick="switchLoginTab('student')">Student Login</div>
             </div>
 
             <!-- Admin Form -->
             <div id="adminLoginForm" class="login-form active">
-                <input type="password" id="adminPasswordInput" placeholder="Enter admin password">
-                <button type="button" id="adminLoginBtn">Login as Admin</button>
+                <input type="password" id="adminPasswordInput" placeholder="Enter admin password" onkeydown="if(event.key === 'Enter') checkAdminPassword()">
+                <button type="button" onclick="checkAdminPassword()">Login as Admin</button>
                 <p id="loginError" style="color: red; font-size: 0.85rem; margin-top: 10px; display: none;">Incorrect Password!</p>
             </div>
 
             <!-- Student Form -->
             <div id="studentLoginForm" class="login-form">
-                <input type="text" id="studentRollInput" placeholder="Enter Roll No or Name">
-                <button type="button" id="studentLoginBtn">Login as Student</button>
+                <input type="text" id="studentRollInput" placeholder="Enter Roll No or Name" onkeydown="if(event.key === 'Enter') checkStudentLogin()">
+                <button type="button" onclick="checkStudentLogin()">Login as Student</button>
                 <p id="studentLoginError" style="color: red; font-size: 0.85rem; margin-top: 10px; display: none;">Please enter Roll No or Name!</p>
             </div>
         </div>
@@ -100,7 +100,7 @@
                 <div class="admin-profile-box">
                     <div class="admin-avatar-container" title="Click to change photo">
                         <img id="adminProfileImg" src="https://via.placeholder.com/40" alt="Avatar" class="admin-avatar">
-                        <input type="file" id="adminPhotoInput" class="admin-avatar-input" accept="image/*">
+                        <input type="file" id="adminPhotoInput" class="admin-avatar-input" accept="image/*" onchange="updateAdminPhoto(event)">
                     </div>
                     <div class="admin-info">
                         <h3 id="sidebarRoleTitle">NK Education</h3>
@@ -108,7 +108,7 @@
                     </div>
                 </div>
             </div>
-            <button class="logout-btn" id="logoutBtn">🚪 Logout Portal</button>
+            <button class="logout-btn" onclick="logoutPortal()">🚪 Logout Portal</button>
         </div>
         <ul class="sidebar-menu" id="sidebarMenuList"></ul>
     </sidebar>
@@ -139,7 +139,7 @@
                 <select id="sBoard"><option value="MP Board">MP Board</option><option value="CBSE">CBSE</option><option value="ICSE">ICSE</option></select>
             </div>
             <div class="form-group"><label>Student Photo</label><input type="file" id="sPhoto" accept="image/*"></div>
-            <button type="button" id="addStudentBtn">+ Add Student</button>
+            <button type="button" onclick="addStudent()">+ Add Student</button>
             <table id="studentTable">
                 <tr><th>Photo</th><th>Roll & Name</th><th>Phone</th><th>Actions</th></tr>
                 <tr><td><img src="https://via.placeholder.com/40" style="border-radius:50%"></td><td><b>105</b><br>Shreya prajapati</td><td>-</td><td>No Phone</td></tr>
@@ -153,7 +153,7 @@
             <div class="form-group"><label>Phone Number</label><input type="text" id="ePhone" placeholder="Mobile Number"></div>
             <div class="form-group"><label>Address</label><input type="text" id="eAddress" placeholder="Address"></div>
             <div class="form-group"><label>Board</label><select id="eBoard"><option value="MP Board">MP Board</option><option value="CBSE">CBSE</option></select></div>
-            <button type="button" id="addEnquiryBtn">Save Enquiry</button>
+            <button type="button" onclick="addEnquiry()">Save Enquiry</button>
             <table id="enquiryTable">
                 <tr><th>Name</th><th>Phone</th><th>Address</th><th>Board</th><th>Status</th></tr>
                 <tr><td>Rohit Verma</td><td>9876543210</td><td>Satna</td><td>MP Board</td><td>Active Lead</td></tr>
@@ -182,7 +182,7 @@
             <div class="form-group"><label>Attendance Date</label><input type="date" id="attendanceDate"></div>
             <div class="form-group">
                 <label>Select Class to Load Students List</label>
-                <select id="attendanceClassSelect">
+                <select id="attendanceClassSelect" onchange="loadClassStudentsForAttendance()">
                     <option value="">-- Choose Class --</option>
                     <option value="10th">Class 10th</option>
                     <option value="12th">Class 12th</option>
@@ -191,8 +191,7 @@
             <table id="attendanceListTable">
                 <tr><th>Roll No</th><th>Student Name</th><th>Class</th><th>Mark Attendance</th></tr>
             </table>
-            
-            <br><button type="button" id="saveAttendanceBtn">Save Attendance</button>
+            <br><button type="button" onclick="saveAttendance()">Save Attendance</button>
         </div>
 
         <!-- 6. Student Performance & Comparison -->
@@ -206,4 +205,28 @@
                 </select>
             </div>
             <div style="width: 70%; margin: auto;"><canvas id="classComparisonChart"></canvas></div>
-            <hr style="margin: 20px
+            <hr style="margin: 20px 0;">
+            <h3>Individual Student Comparison & Graphs</h3>
+            <div style="width: 70%; margin: auto; margin-top: 15px;"><canvas id="individualChart"></canvas></div>
+        </div>
+
+        <!-- 7. SMS & Notification Center -->
+        <div id="sms-center" class="section-box admin-only">
+            <h2>SMS & Notification Center</h2>
+            <div class="form-group">
+                <label>Select Message Template</label>
+                <select id="smsTemplate">
+                    <option value="welcome">Welcome Message</option>
+                    <option value="fees_due">Fees Due Reminder</option>
+                    <option value="fees_paid">Fees Paid Receipt</option>
+                </select>
+            </div>
+            <button type="button" onclick="sendSMSNotifications()">Send Bulk SMS / Notification</button>
+        </div>
+
+        <!-- 8. Test Series & PDF Hub -->
+        <div id="test-series" class="section-box">
+            <h2>Test Series & Practice Hub</h2>
+            <div id="adminTestCreationBox" class="form-group admin-only" style="background:#f1f9f6; padding:15px; border-radius:8px; margin-bottom:20px;">
+                <h3>Create New Test (Admin Only)</h3>
+                <input type="text" id="testTitle" placeholder="Test Title e.g.
